@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .hint {
+            display: none;
+        }
+        .hint.active {
+            display: block;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <audio src="src/bass.mp3" id="audio1" controls preload="auto" autobuffer></audio>
+    <audio src="src/other.mp3" id="audio2" controls preload="auto" autobuffer></audio>
+    <audio src="src/vocals.mp3" id="audio3" controls preload="auto" autobuffer></audio>
+    <audio src="src/drums.mp3" id="audio4" controls preload="auto" autobuffer ontimeupdate="nowPlaying()"></audio>
+
+    <button id="playaudio" onclick="togglePlay()">Play Audio</button>
+    <button id="pauseaudio" onclick="pauseAudio()">Pause Audio</button>
+    <button id="fwd5" onclick="fwd5()">Skip +5</button>
+
+    <input type="range" min="0" max="100" id="timeline" name="timeline" value="0" />
+    
+    <span id="tracktime">0 / 0</span>
+    <span id="globalTime"></span>
+    <span>Current bar: <span id="currentBar"></span></span>
+
+    <div id="metadata">
+        <div id="structure">
+            <div class="macro hint" data-part="intro" data-ocurrence="1" data-begins="1" data-ends="8">
+                <h3>Intro</h3>
+                <div class="micro hint" data-begins="1" data-ends="2">Primera instrucción</div>
+                <div class="micro hint" data-begins="3" data-ends="4">Segunda instrucción</div>
+            </div>
+            <div class="macro hint" data-part="a" data-ocurrence="1" data-begins="9" data-ends="16">
+                <h3>A1</h3>
+            </div>
+            <div class="macro hint" data-part="a" data-ocurrence="2" data-begins="17" data-ends="24">
+                <h3>A2</h3>
+            </div>
+            <div class="macro hint" data-part="b" data-ocurrence="1" data-begins="25" data-ends="33">
+                <h3>B1</h3>
+            </div>
+            <div class="macro hint" data-part="intro" data-ocurrence="2" data-begins="34" data-ends="41">
+                <h3>Intro2</h3>
+            </div>
+            <div class="macro hint" data-part="a" data-ocurrence="3" data-begins="42" data-ends="49">
+                <h3>A3</h3>
+            </div>
+            <div class="macro hint" data-part="a" data-ocurrence="4" data-begins="50" data-ends="57">
+                <h3>A4</h3>
+            </div>
+            <div class="macro hint" data-part="b" data-ocurrence="2" data-begins="58" data-ends="67">
+                <h3>B2</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // define bpm
+        var bpm = 82;
+        var beatSeconds = 60/bpm;
+
+        // define audio elements. these will be like different tracks
+        var audio1 = document.getElementById("audio1");
+        var audio2 = document.getElementById("audio2");
+        var audio3 = document.getElementById("audio3");
+        var audio4 = document.getElementById("audio4");
+
+        // we need the duration to be global
+        var audioDuration;
+
+        // console.log(parseInt(audioDuration));
+        var timeline = document.getElementById("timeline");
+        var timelineMax = timeline.getAttribute("max");
+        // console.log(timelineMax);
+        
+        // this will help with some maths
+        var timelineStep;
+        // console.log(timelineStep);
+
+        var currentTimeSecs;
+        var barSecs;
+        var currentBeat;
+        var currentBar;
+        
+        // console.log(timeline.getAttribute("max"));
+
+        // Recursive function to update active classes for nested elements
+        function updateActiveClassesRecursive(element, currentBar) {
+            const begins = parseInt(element.getAttribute('data-begins'));
+            const ends = parseInt(element.getAttribute('data-ends'));
+
+            if (currentBar >= begins && currentBar <= ends) {
+                element.classList.add('active');
+            } else {
+                element.classList.remove('active');
+            }
+
+            // Recursively check nested elements
+            const nestedElements = element.querySelectorAll('.hint');
+            nestedElements.forEach(nestedElement => {
+                updateActiveClassesRecursive(nestedElement, currentBar);
+            });
+        }
+
+        // Update the active classes based on the currentBar value
+        function updateActiveClasses(currentBar) {
+            const elements = document.querySelectorAll('.hint');
+            elements.forEach(element => {
+                updateActiveClassesRecursive(element, currentBar);
+            });
+        }
+
+        function nowPlaying(){
+            currentTimeSecs = audio4.currentTime;
+            // console.log(beatSeconds);
+            currentBar = Math.ceil(audio4.currentTime / (beatSeconds * 4));
+            document.getElementById('currentBar').innerHTML = currentBar;
+            document.getElementById('tracktime').innerHTML = audio4.currentTime;
+            updateActiveClasses(currentBar);
+        }
+
+        let audioElements = [];
+        let isPlaying = false;
+
+        window.onload = () => {
+            audioElements = [
+                document.getElementById('audio1'),
+                document.getElementById('audio2'),
+                document.getElementById('audio3'),
+                document.getElementById('audio4')
+            ];
+            let loadedCount = 0;
+            const handleCanPlayThrough = () => {
+                loadedCount++;
+
+                if (loadedCount === audioElements.length) {
+                    audioElements.forEach(audio => {
+                        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
+                        // audio.play();
+                    });
+                }
+            };
+            audioElements.forEach(audio => {
+                audio.addEventListener('canplaythrough', handleCanPlayThrough);
+                audio.load(); // Initiate preload
+            });
+        };
+
+        function togglePlay() {
+            if (isPlaying) {
+                pauseAll();
+            } else {
+                playAll();
+            }
+        }
+
+        function playAll() {
+            audioElements.forEach(audio => {
+                audio.play();
+            });
+            isPlaying = true;
+            document.getElementById('playaudio').textContent = 'Pause';
+        }
+
+        function pauseAll() {
+            audioElements.forEach(audio => {
+                audio.pause();
+                // audio.currentTime = 0; // Reset the playback position
+            });
+            isPlaying = false;
+            document.getElementById('playaudio').textContent = 'Play';
+        }
+        
+        // APPROACH 2
+        // let audioContext;
+        // let audioBuffers = [];
+        // let sourceNodes = [];
+        // let playbackPositions = [];
+        // let isPlaying = false;
+
+        // // Create an AudioContext when the page loads
+        // window.onload = () => {
+        //     audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        //     loadAudioFiles();
+        // };
+
+        // // Load audio files using Web Audio API
+        // function loadAudioFiles() {
+        //     const audioUrls = ['src/bass.mp3', 'src/other.mp3', 'src/vocals.mp3', 'src/drums.mp3'];
+
+        //     Promise.all(audioUrls.map(fetchAndDecodeAudio)).then(buffers => {
+        //         audioBuffers = buffers;
+        //     });
+        // }
+
+        // // Fetch and decode audio using Promises
+        // function fetchAndDecodeAudio(url) {
+        //     return fetch(url)
+        //         .then(response => response.arrayBuffer())
+        //         .then(buffer => audioContext.decodeAudioData(buffer));
+        // }
+
+        // // Toggle play/pause button
+        // function togglePlay() {
+        //     if (isPlaying) {
+        //         pauseAll();
+        //     } else {
+        //         playAll();
+        //     }
+        // }
+
+        // // Play all audio elements simultaneously
+        // function playAll() {
+        //     sourceNodes = audioBuffers.map((buffer, index) => {
+        //         const source = audioContext.createBufferSource();
+        //         source.buffer = buffer;
+        //         source.connect(audioContext.destination);
+        //         source.start(0, playbackPositions[index] || 0); // Resume from stored position
+        //         return source;
+        //     });
+
+        //     isPlaying = true;
+        //     document.getElementById('playaudio').textContent = 'Pause';
+        // }
+
+        // // Pause all audio elements
+        // function pauseAll() {
+        //     playbackPositions = sourceNodes.map(source => {
+        //         source.stop();
+        //         return source.context.currentTime;
+        //     });
+
+        //     isPlaying = false;
+        //     document.getElementById('playaudio').textContent = 'Play';
+        // }
+
+        function fwd5(){
+            audio1.currentTime += 5;
+            audio2.currentTime += 5;
+            audio3.currentTime += 5;
+            audio4.currentTime += 5;
+        }
+        const globalTimePrint = document.querySelector("#globalTime");
+        const input = document.querySelector("#timeline");
+
+        // use a single global timeline to set currentTime for all players
+        // requires audio to actually be loaded!
+        audio1.onloadedmetadata = function() {
+            audioDuration = audio1.duration;
+            console.log("success");
+            console.log(audioDuration);
+            timelineStep = parseInt(timelineMax)/audioDuration;
+            console.log(timelineStep);
+            timeline.addEventListener("input", (event) => {
+                audio1.currentTime = event.target.value / timelineStep;
+                audio2.currentTime = event.target.value / timelineStep;
+                audio3.currentTime = event.target.value / timelineStep;
+                audio4.currentTime = event.target.value / timelineStep;
+                // console.log(event.target.value);
+            });
+        }
+
+        // trigger when playing
+        // todo: have this depend on the range slider position
+        audio1.addEventListener("play", (event) => {
+            console.log(audio1.currentTime);
+        })
+    </script>
+</body>
+</html>
