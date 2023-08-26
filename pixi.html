@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .muteBtn.active {
+            background:lightgoldenrodyellow;
+        }
+        .macro.hint:not(.active),
+        .macro.hint.active .hint.micro:not(.active) {
+            display: none;
+        }
+        .macro.hint.active {
+            display: block;
+        }
+        .macro.hint.active .hint.micro.active {
+            display: block !important;
+        }
+        .soloBtn.active {
+            background: lightblue;
+        }
+    </style>
+    <!-- PixiJS must be imported before @pixi/sound -->
+    <script src="https://unpkg.com/pixi.js@7.x/dist/pixi.min.js"></script>
+
+    <!-- found here, if not using CDN "./node_modules/@pixi/sound/dist/pixi-sound.js" -->
+    <script src="https://unpkg.com/@pixi/sound@5.2.1/dist/pixi-sound.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <button id="playAudio" onclick="bufferIntent()">Play Audio</button>
+    <button id="resumeAudio" onclick="resumeAll()">Resume Audio</button>
+    <button id="pauseAudio" onclick="pauseAll()">Pause Audio</button>
+    <button id="fwd5" onclick="fwd5()">Skip +5</button>
+
+    <fieldset>
+        <label>Bass</label>
+        <button id="muteBass" class="muteBtn" onclick="muteBass(this)">Mute Bass</button>
+        <button id="soloBass" class="soloBtn" onclick="toggleSoloBass(this)">Solo Bass</button>
+    </fieldset>
+
+    <fieldset>
+        <label>Drums</label>
+        <button id="muteDrums" class="muteBtn" onclick="muteDrums(this)">Mute Drums</button>
+        <button id="soloDrums" class="soloBtn" onclick="toggleSoloDrums(this)">Solo Drums</button>
+    </fieldset>
+
+    <fieldset>
+        <label>Vocals</label>
+        <button id="muteVocals" class="muteBtn" onclick="muteVocals(this)">Mute Vocals</button>
+        <button id="soloVocals" class="soloBtn" onclick="toggleSoloVocals(this)">Solo Vocals</button>
+    </fieldset>
+
+    <fieldset>
+        <label>Harmonic</label>
+        <button id="muteOther" class="muteBtn" onclick="muteOther(this)">Mute Other</button>
+        <button id="soloOther" class="soloBtn" onclick="toggleSoloOther(this)">Solo Other</button>
+    </fieldset>
+
+    <input type="range" min="0" max="100" step="1" id="timeline" name="timeline" value="0" />
+    
+    <span id="tracktime">0 / 0</span>
+    <span id="globalTime"></span>
+    <span>Current bar: <span id="currentBar"></span></span>
+
+    <div id="metadata">
+        <div id="structure">
+            <div class="demo">
+                <div id="placeholder" class="macro hint active">
+                    <h3>Estructura</h3>
+                    <ul>
+                        <li>Intro: 8 compases</li>
+                        <li>Parte A: 16 compases</li>
+                        <li>Parte B: 8 + 1 compases</li>
+                        <li>Parte A: 16 compases</li>
+                        <li>Parte B: 8 + 2 compases</li>
+                    </ul>
+                </div>
+                <div class="macro hint" data-part="intro" data-ocurrence="1" data-begins="1" data-ends="8">
+                    <h3>Intro</h3>
+                    <div class="micro hint" data-begins="1" data-ends="6">Penta de F#m</div>
+                    <div class="micro hint" data-begins="7" data-ends="8">Turnaround</div>
+                </div>
+                <div class="macro hint" data-part="a" data-ocurrence="1" data-begins="9" data-ends="16">
+                    <h3>A1</h3>
+                    <div class="micro hint" data-begins="9" data-ends="12">
+                        With the streams of light, I can feel your energy<br>
+                        You fulfill my night, but then ripples into nothing<br>
+                    </div>
+                    <div class="micro hint" data-begins="13" data-ends="16">
+                        As the days go by I go evolving<br>
+                        You remain the same and there’s no one else to blame<br>
+                    </div>
+                </div>
+                <div class="macro hint" data-part="a" data-ocurrence="2" data-begins="17" data-ends="24">
+                    <h3>A2</h3>
+                    <div class="micro hint" data-begins="17" data-ends="20">
+                        You repeat the lie while I’m finding myself, you all talking about time<br>
+                        Why are you being someone else?<br>
+                        Why are you being someone else?<br>
+                    </div>
+                    <div class="micro hint" data-begins="21" data-ends="24">
+                        You repeat the lie while I’m finding myself, you all talking about timе<br>
+                        Being someone еlse<br>
+                        Why are you being someone else?<br>
+                    </div>
+                </div>
+                <div class="macro hint" data-part="b" data-ocurrence="1" data-begins="25" data-ends="33">
+                    <h3>B1</h3>
+                </div>
+                <div class="macro hint" data-part="intro" data-ocurrence="2" data-begins="34" data-ends="41">
+                    <h3>Intro2</h3>
+                </div>
+                <div class="macro hint" data-part="a" data-ocurrence="3" data-begins="42" data-ends="49">
+                    <h3>A3</h3>
+                </div>
+                <div class="macro hint" data-part="a" data-ocurrence="4" data-begins="50" data-ends="57">
+                    <h3>A4</h3>
+                </div>
+                <div class="macro hint" data-part="b" data-ocurrence="2" data-begins="58" data-ends="67">
+                    <h3>B2</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <fieldset id="parts">
+        <label for="">Skip to</label>
+        <button class="skipTo" data-skip="0">Intro</button>
+        <button class="skipTo" data-skip="8">Part A</button>
+        <button class="skipTo" data-skip="24">Part B</button>
+        <button class="skipTo" data-skip="33">Intro ii</button>
+        <button class="skipTo" data-skip="41">Part A ii</button>
+        <button class="skipTo" data-skip="57">Part B ii</button>
+    </fieldset>
+
+    <script>
+        // define bpm
+        var bpm = 82;
+        var beatSeconds = 60/bpm;
+
+        document.getElementById("timeline").setAttribute("step", beatSeconds/10);
+
+        // define audio elements. these will be like different tracks
+        var audio1 = document.getElementById("audio1");
+        var audio2 = document.getElementById("audio2");
+        var audio3 = document.getElementById("audio3");
+        var audio4 = document.getElementById("audio4");
+
+        // we need the duration to be global
+        var audioDuration;
+
+        // console.log(parseInt(audioDuration));
+        var timeline = document.getElementById("timeline");
+        var timelineMax = timeline.getAttribute("max");
+        // console.log(timelineMax);
+        
+        // this will help with some maths
+        var timelineStep;
+        // console.log(timelineStep);
+
+        var currentTimeSecs;
+        var barSecs;
+        var currentBeat;
+        var currentBar;
+        var currentTimeInS;
+        var globalProgress;
+        
+        let bass;
+        let mutedBass;
+        let mutedDrums;
+        let mutedOther;
+        let mutedVocals;
+        let soloBass;
+        let soloDrums;
+        let soloOther;
+        let soloVocals;
+
+        let isDragging = false;
+        
+        // console.log(timeline.getAttribute("max"));
+
+        PIXI.sound.disableAutoPause = true;
+
+        PIXI.sound.add('bass', {
+            url: "src/bass2.mp3",
+            preload: true,
+            singleInstance: true
+        });
+        PIXI.sound.add('other', {
+            url:  'src/other2.mp3',
+            preload: true,
+            singleInstance: true
+        });
+        PIXI.sound.add('vocals', {
+            url:  'src/vocals2.mp3',
+            preload: true,
+            singleInstance: true
+        });
+        PIXI.sound.add('drums', {
+            url:  'src/drums2.mp3',
+            preload: true,
+            singleInstance: true
+        });
+
+        function muteBass(el) {
+            if (!mutedBass) {
+                PIXI.sound._sounds['bass'].volume = 0;
+                el.classList.add('active');
+                mutedBass = true;
+            } else {
+                PIXI.sound._sounds['bass'].volume = 1;
+                el.classList.remove('active');
+                mutedBass = false;
+            }
+        }
+
+        function muteDrums(el) {
+            if (!mutedDrums) {
+                PIXI.sound._sounds['drums'].volume = 0;
+                el.classList.add('active');
+                mutedDrums = true;
+            } else {
+                PIXI.sound._sounds['drums'].volume = 1;
+                el.classList.remove('active');
+                mutedDrums = false;
+            }
+        }
+
+        function muteOther(el) {
+            if (!mutedOther) {
+                PIXI.sound._sounds['other'].volume = 0;
+                el.classList.add('active');
+                mutedOther = true;
+            } else {
+                PIXI.sound._sounds['other'].volume = 1;
+                el.classList.remove('active');
+                mutedOther = false;
+            }
+        }
+
+        function muteVocals(el) {
+            if (!mutedVocals) {
+                PIXI.sound._sounds['vocals'].volume = 0;
+                el.classList.add('active');
+                mutedVocals = true;
+            } else {
+                PIXI.sound._sounds['vocals'].volume = 1;
+                el.classList.remove('active');
+                mutedVocals = false;
+            }
+        }
+
+        const soloButtons = document.querySelectorAll('.soloBtn');
+        const muteButtons = document.querySelectorAll('.muteBtn');
+
+        function toggleSoloBass(el) {
+            if (!soloBass) {
+                PIXI.sound._sounds['bass'].volume = 1;
+                PIXI.sound._sounds['other'].volume = 0;
+                PIXI.sound._sounds['vocals'].volume = 0;
+                PIXI.sound._sounds['drums'].volume = 0;
+                soloBass = true;
+                soloOther = false;
+                soloDrums = false;
+                soloVocals = false;
+            } else {
+                PIXI.sound._sounds['bass'].volume = 1;
+                PIXI.sound._sounds['other'].volume = 1;
+                PIXI.sound._sounds['vocals'].volume = 1;
+                PIXI.sound._sounds['drums'].volume = 1;
+                soloBass = false;
+            }
+            if (el.classList.contains('active')) {
+                el.classList.remove('active');
+            } else {
+                // Remove "active" class from all buttons
+                soloButtons.forEach(btn => btn.classList.remove('active'));
+                muteButtons.forEach(btn => btn.classList.remove('active'));
+                // Add "active" class to the clicked button
+                el.classList.add('active');
+            }
+        }
+
+        function toggleSoloDrums(el) {
+            if (!soloDrums) {
+                PIXI.sound._sounds['bass'].volume = 0;
+                PIXI.sound._sounds['other'].volume = 0;
+                PIXI.sound._sounds['vocals'].volume = 0;
+                PIXI.sound._sounds['drums'].volume = 1;
+                soloDrums = true;
+                soloOther = false;
+                soloVocals = false;
+                soloBass = false;
+            } else {
+                PIXI.sound._sounds['bass'].volume = 1;
+                PIXI.sound._sounds['other'].volume = 1;
+                PIXI.sound._sounds['vocals'].volume = 1;
+                PIXI.sound._sounds['drums'].volume = 1;
+                soloDrums = false;   
+            }
+            if (el.classList.contains('active')) {
+                el.classList.remove('active');
+            } else {
+                // Remove "active" class from all buttons
+                soloButtons.forEach(btn => btn.classList.remove('active'));
+                muteButtons.forEach(btn => btn.classList.remove('active'));
+                // Add "active" class to the clicked button
+                el.classList.add('active');
+            }
+        }
+
+        function toggleSoloOther(el) {
+            if (!soloOther) {
+                PIXI.sound._sounds['bass'].volume = 0;
+                PIXI.sound._sounds['other'].volume = 1;
+                PIXI.sound._sounds['vocals'].volume = 0;
+                PIXI.sound._sounds['drums'].volume = 0;
+                soloOther = true;
+                soloVocals = false;
+                soloDrums = false;
+                soloBass = false;
+            } else {
+                PIXI.sound._sounds['bass'].volume = 1;
+                PIXI.sound._sounds['other'].volume = 1;
+                PIXI.sound._sounds['vocals'].volume = 1;
+                PIXI.sound._sounds['drums'].volume = 1;
+                soloOther = false;
+            }
+            if (el.classList.contains('active')) {
+                el.classList.remove('active');
+            } else {
+                // Remove "active" class from all buttons
+                soloButtons.forEach(btn => btn.classList.remove('active'));
+                muteButtons.forEach(btn => btn.classList.remove('active'));
+                // Add "active" class to the clicked button
+                el.classList.add('active');
+            }
+        }
+
+        function toggleSoloVocals(el) {
+            if (!soloVocals) {
+                PIXI.sound._sounds['bass'].volume = 0;
+                PIXI.sound._sounds['other'].volume = 0;
+                PIXI.sound._sounds['vocals'].volume = 1;
+                PIXI.sound._sounds['drums'].volume = 0;
+                soloVocals = true;
+                soloOther = false;
+                soloDrums = false;
+                soloBass = false;
+            } else {
+                PIXI.sound._sounds['bass'].volume = 1;
+                PIXI.sound._sounds['other'].volume = 1;
+                PIXI.sound._sounds['vocals'].volume = 1;
+                PIXI.sound._sounds['drums'].volume = 1;
+                soloVocals = false;
+            }
+            if (el.classList.contains('active')) {
+                el.classList.remove('active');
+            } else {
+                // Remove "active" class from all buttons
+                soloButtons.forEach(btn => btn.classList.remove('active'));
+                muteButtons.forEach(btn => btn.classList.remove('active'));
+                // Add "active" class to the clicked button
+                el.classList.add('active');
+            }
+        }
+
+        function secondsToMinutesAndSeconds(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        // Recursive function to update active classes for nested elements
+        function updateActiveClassesRecursive(element, currentBar) {
+            const begins = parseInt(element.getAttribute('data-begins'));
+            const ends = parseInt(element.getAttribute('data-ends'));
+
+            if (currentBar >= begins && currentBar <= ends) {
+                element.classList.add('active');
+            } else {
+                element.classList.remove('active');
+            }
+
+            // Recursively check nested elements
+            const nestedElements = element.querySelectorAll('.hint');
+            nestedElements.forEach(nestedElement => {
+                updateActiveClassesRecursive(nestedElement, currentBar);
+            });
+        }
+
+        // Update the active classes based on the currentBar value
+        function updateActiveClasses(currentBar) {
+            const elements = document.querySelectorAll('.hint');
+            elements.forEach(element => {
+                updateActiveClassesRecursive(element, currentBar);
+            });
+        }
+
+        function nowPlaying(){
+            // console.log(beatSeconds);
+            currentBar = Math.ceil(((globalProgress) * audioDuration) / (beatSeconds * 4));
+            document.getElementById('currentBar').innerHTML = currentBar;
+            updateActiveClasses(currentBar);
+        }
+
+        let audioElements = [];
+        let isPlaying = false;
+
+        function togglePlay() {
+            if (isPlaying) {
+                pauseAll();
+            } else {
+                playAll();
+            }
+        }
+
+        timeline.addEventListener('mousedown', () => {
+            const audioElements = [
+                PIXI.sound._sounds['bass'],
+                PIXI.sound._sounds['other'],
+                PIXI.sound._sounds['vocals'],
+                PIXI.sound._sounds['drums']
+            ];
+
+            // Attempt to play all audio elements
+            audioElements.forEach(audio => audio.pause());
+            isPlaying = false;
+            isDragging = true;
+        });
+
+        timeline.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                
+                globalProgress = timeline.value;
+
+                // Attempt to play all audio elements
+                skipIntent();
+
+                // console.log(globalProgress);
+
+                isPlaying = true;
+            }
+        });
+
+        function myFunction(parameter) {
+            console.log(`Function called with parameter: ${parameter}`);
+            // Your code here using the parameter
+        }
+
+        // Get all buttons with the "custom-button" class
+        const skipButtons = document.querySelectorAll('.skipTo');
+
+        // Attach event listeners to each button
+        skipButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const parameter = button.getAttribute('data-skip');
+                // console.log("skip to", parameter);
+                globalProgress = ((parameter * beatSeconds * 4) / audioDuration) * 100;
+                // console.log("plz skip to ", globalProgress);
+                skipIntent();
+            });
+        });
+
+        function bufferIntent() {
+            const audioElements = [
+                PIXI.sound._sounds['bass'],
+                PIXI.sound._sounds['other'],
+                PIXI.sound._sounds['vocals'],
+                PIXI.sound._sounds['drums']
+            ];
+
+            // Attempt to play all audio elements
+            audioElements.forEach(audio => audio.play({start: 0}));
+
+            const checkPlayable = () => {
+                const allPlayable = audioElements.every(audio => audio.isPlayable);
+
+                if (allPlayable) {
+                    audioElements.forEach(audio => audio.play());
+                    const instance = PIXI.sound._sounds['bass'].play();
+                    document.getElementById("placeholder").classList.remove("active");
+                    instance.on('progress', function(progress, duration) {
+                        // console.log('Amount played: ', progress * 100 + '% of ', duration);
+                        audioDuration = duration;
+                        globalProgress = progress;
+                        // console.log("progress percent", globalProgress);
+                        currentTimeInS = Math.round((globalProgress) * duration);
+                        const timeString = secondsToMinutesAndSeconds(currentTimeInS);
+                        document.getElementById('tracktime').innerHTML = timeString;
+                        document.getElementById('timeline').value = progress * 100;
+                        nowPlaying();
+                        // console.log(duration);
+                        // TODOOOOO: TRADUCIR EL PROGRESO A SEGUNDOS Y QUE SEA CERTEROX
+                    });
+                    instance.on('end', function() {
+                        console.log('Sound finished playing');
+                    });
+                    isPlaying = true;
+                } else {
+                    setTimeout(checkPlayable, 2000); // Check again after 100ms
+                }
+            };
+
+            // Actually pause after 50ms, to enforce
+            setTimeout(() => {
+                audioElements.forEach(audio => audio.stop());
+                checkPlayable(); // Start checking if they are playable
+            }, 5);
+            // console.log(audioElements[0].duration);
+        }
+
+        function skipIntent() {
+            const audioElements = [
+                PIXI.sound._sounds['bass'],
+                PIXI.sound._sounds['other'],
+                PIXI.sound._sounds['vocals'],
+                PIXI.sound._sounds['drums']
+            ];
+
+            // Attempt to play all audio elements
+            audioElements.forEach(audio => audio.play({start: (globalProgress/100) * audioDuration}));
+
+            const checkPlayable = () => {
+                const allPlayable = audioElements.every(audio => audio.isPlayable);
+
+                if (allPlayable) {
+                    audioElements.forEach(audio => audio.play({start: (globalProgress/100) * audioDuration}));
+                    const instance = PIXI.sound._sounds['bass'].play({start: (globalProgress/100) * audioDuration});
+                    instance.on('progress', function(progress, duration) {
+                        // console.log('Amount played: ', progress * 100 + '% of ', duration);
+                        audioDuration = duration;
+                        globalProgress = progress;
+                        // console.log("skipped to ", globalProgress);
+                        currentTimeInS = Math.round((globalProgress) * duration);
+                        const timeString = secondsToMinutesAndSeconds(currentTimeInS);
+                        document.getElementById('tracktime').innerHTML = timeString;
+                        document.getElementById('timeline').value = progress * 100;
+                        nowPlaying();
+                        // console.log(duration);
+                        // TODOOOOO: TRADUCIR EL PROGRESO A SEGUNDOS Y QUE SEA CERTEROX
+                    });
+                    instance.on('end', function() {
+                        console.log('Sound finished playing');
+                    });
+                    isPlaying = true;
+                } else {
+                    setTimeout(checkPlayable, 2000); // Check again after 100ms
+                }
+            };
+
+            // Actually pause after 50ms, to enforce
+            setTimeout(() => {
+                audioElements.forEach(audio => audio.stop());
+                checkPlayable(); // Start checking if they are playable
+            }, 5);
+            // console.log(audioElements[0].duration);
+        }
+
+        function pauseAll() {
+            const audioElements = [
+                PIXI.sound._sounds['bass'],
+                PIXI.sound._sounds['other'],
+                PIXI.sound._sounds['vocals'],
+                PIXI.sound._sounds['drums']
+            ];
+
+            globalProgress = timeline.value;
+            console.log("paused progress seconds",  (globalProgress/100) * audioDuration);
+
+            // Attempt to play all audio elements
+            audioElements.forEach(audio => audio.pause());
+            isPlaying = false;
+        }
+        
+        function resumeAll() {
+            globalProgress = timeline.value;
+
+            skipIntent();
+
+            isPlaying = true;
+        }
+        
+        const globalTimePrint = document.querySelector("#globalTime");
+
+    </script>
+</body>
+</html>
