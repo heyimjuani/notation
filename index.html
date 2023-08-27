@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: #fff;
+            background: #111111;
+        }
+        #onboarding {
+            display: none;
+        }
+        #app {
+            display: none;
+        }
+        #onboarding.active,
+        #app.active {
+            display: block;
+        }
         .muteBtn.active {
             background:lightgoldenrodyellow;
         }
@@ -20,6 +35,47 @@
         .soloBtn.active {
             background: lightblue;
         }
+        #toggleMetronome.active {
+            background: lightgoldenrodyellow;
+        }
+        fieldset {
+            display: flex;
+        }
+        button.skipTo {
+            flex: attr(data-duration number);
+        }
+        #timeline {
+            width: calc(100% - 20px);
+            margin-left: 10px;
+        }
+        .skipTo {
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            margin: 0px 2px;
+            text-transform: uppercase;
+            font-size: 11px;
+            min-height: 42px;
+            font-weight: 600;
+            letter-spacing: .8px;
+        }
+        .skipTo small {
+            display: block;
+            padding-top: 2px;
+            color: #000;
+            opacity: .5;
+            letter-spacing: 1.5px;
+            font-weight: normal;
+        }
+        .part-intro {
+            background: #88BEF5;
+        }
+        .part-a {
+            background: #BA53DE;
+        }
+        .part-b {
+            background: #F469A9;
+        }
     </style>
     <!-- PixiJS must be imported before @pixi/sound -->
     <script src="https://unpkg.com/pixi.js@7.x/dist/pixi.min.js"></script>
@@ -29,124 +85,145 @@
     <title>Document</title>
 </head>
 <body>
-    <button id="playAudio" onclick="bufferIntent()">Play Audio</button>
-    <button id="resumeAudio" onclick="resumeAll()">Resume Audio</button>
-    <button id="pauseAudio" onclick="pauseAll()">Pause Audio</button>
-    <button id="fwd5" onclick="fwd5()">Skip +5</button>
+    <div id="onboarding" class="active">
+        <h1>Suddenly Driven</h1>
+        <h2>Grace & Badlove</h2>
+        <h3>¿Qué instrumento tocás?</h3>
+        <div id="pick">
+            <button class="pickInstrument" id="bass">Bass</button>
+            <button class="pickInstrument" id="keyboard">Keyboard</button>
+            <button class="pickInstrument" id="vocals">Vocals</button>
+            <button class="pickInstrument" id="drums">Drums</button>
+        </div>
+    </div>
+    <div id="app">
+        <button id="playAudio" onclick="bufferIntent()">Load Audio</button>
+        <button id="togglePlay" onclick="togglePlay(this)">Toggle Audio</button>
+        <!--button id="resumeAudio" onclick="resumeAll()">Resume Audio</button>
+        <button id="pauseAudio" onclick="pauseAll()">Pause Audio</button-->
+        <button id="toggleMetronome" onclick="toggleMetronome(this)">Metronome</button>
+        <div id="mixer">
+            <fieldset>
+                <label>Bass</label>
+                <button id="muteBass" class="muteBtn" onclick="muteBass(this)">M</button>
+                <button id="soloBass" class="soloBtn" onclick="toggleSoloBass(this)">S</button>
+            </fieldset>
+        
+            <fieldset>
+                <label>Drums</label>
+                <button id="muteDrums" class="muteBtn" onclick="muteDrums(this)">M</button>
+                <button id="soloDrums" class="soloBtn" onclick="toggleSoloDrums(this)">S</button>
+            </fieldset>
+        
+            <fieldset>
+                <label>Vocals</label>
+                <button id="muteVocals" class="muteBtn" onclick="muteVocals(this)">M</button>
+                <button id="soloVocals" class="soloBtn" onclick="toggleSoloVocals(this)">S</button>
+            </fieldset>
+        
+            <fieldset>
+                <label>Harmonic</label>
+                <button id="muteOther" class="muteBtn" onclick="muteOther(this)">M</button>
+                <button id="soloOther" class="soloBtn" onclick="toggleSoloOther(this)">S</button>
+            </fieldset>
+        </div>
 
-    <fieldset>
-        <label>Bass</label>
-        <button id="muteBass" class="muteBtn" onclick="muteBass(this)">M</button>
-        <button id="soloBass" class="soloBtn" onclick="toggleSoloBass(this)">S</button>
-    </fieldset>
-
-    <fieldset>
-        <label>Drums</label>
-        <button id="muteDrums" class="muteBtn" onclick="muteDrums(this)">M</button>
-        <button id="soloDrums" class="soloBtn" onclick="toggleSoloDrums(this)">S</button>
-    </fieldset>
-
-    <fieldset>
-        <label>Vocals</label>
-        <button id="muteVocals" class="muteBtn" onclick="muteVocals(this)">M</button>
-        <button id="soloVocals" class="soloBtn" onclick="toggleSoloVocals(this)">S</button>
-    </fieldset>
-
-    <fieldset>
-        <label>Harmonic</label>
-        <button id="muteOther" class="muteBtn" onclick="muteOther(this)">M</button>
-        <button id="soloOther" class="soloBtn" onclick="toggleSoloOther(this)">S</button>
-    </fieldset>
-
-    <input type="range" min="0" max="100" step="1" id="timeline" name="timeline" value="0" />
-    
-    <span id="tracktime">0 / 0</span>
-    <span id="globalTime"></span>
-    <span>Current bar: <span id="currentBar"></span></span>
-
-    <div id="metadata">
-        <div id="structure">
-            <div class="demo">
-                <div id="placeholder" class="macro hint active">
-                    <h3>Estructura</h3>
-                    <ul>
-                        <li>Intro: 8 compases</li>
-                        <li>Parte A: 16 compases</li>
-                        <li>Parte B: 8 + 1 compases</li>
-                        <li>Parte A: 16 compases</li>
-                        <li>Parte B: 8 + 2 compases</li>
-                    </ul>
-                </div>
-                <div class="macro hint" data-part="intro" data-ocurrence="1" data-begins="1" data-ends="8">
-                    <h3>Intro</h3>
-                    <div class="micro hint" data-begins="1" data-ends="6">Penta de F#m</div>
-                    <div class="micro hint" data-begins="7" data-ends="8">Turnaround</div>
-                </div>
-                <div class="macro hint" data-part="a" data-ocurrence="1" data-begins="9" data-ends="16">
-                    <h3>A1</h3>
-                    <div class="micro hint" data-begins="9" data-ends="12">
-                        With the streams of light, I can feel your energy<br>
-                        You fulfill my night, but then ripples into nothing<br>
+        <div id="metadata">
+            <div id="structure">
+                <div class="demo">
+                    <div id="placeholder" class="macro hint active">
+                        <h3>Estructura</h3>
+                        <ul>
+                            <li>Intro: 8 compases</li>
+                            <li>Parte A: 16 compases</li>
+                            <li>Parte B: 8 + 1 compases</li>
+                            <li>Intro ii: 8 compases</li>
+                            <li>Parte A ii: 16 compases</li>
+                            <li>Parte B ii: 8 + 2 compases</li>
+                        </ul>
                     </div>
-                    <div class="micro hint" data-begins="13" data-ends="16">
-                        As the days go by I go evolving<br>
-                        You remain the same and there’s no one else to blame<br>
+                    <div class="macro hint" data-part="intro" data-ocurrence="1" data-begins="1" data-ends="8">
+                        <h3>Intro</h3>
+                        <div class="micro hint" data-begins="1" data-ends="6">Penta de F#m</div>
+                        <div class="micro hint" data-begins="7" data-ends="8">Turnaround</div>
                     </div>
-                </div>
-                <div class="macro hint" data-part="a" data-ocurrence="2" data-begins="17" data-ends="24">
-                    <h3>A2</h3>
-                    <div class="micro hint" data-begins="17" data-ends="20">
-                        You repeat the lie while I’m finding myself, you all talking about time<br>
-                        Why are you being someone else?<br>
-                        Why are you being someone else?<br>
+                    <div class="macro hint" data-part="a" data-ocurrence="1" data-begins="9" data-ends="16">
+                        <h3>A1</h3>
+                        <div class="micro hint" data-begins="9" data-ends="12">
+                            With the streams of light, I can feel your energy<br>
+                            You fulfill my night, but then ripples into nothing<br>
+                        </div>
+                        <div class="micro hint" data-begins="13" data-ends="16">
+                            As the days go by I go evolving<br>
+                            You remain the same and there’s no one else to blame<br>
+                        </div>
                     </div>
-                    <div class="micro hint" data-begins="21" data-ends="24">
-                        You repeat the lie while I’m finding myself, you all talking about timе<br>
-                        Being someone еlse<br>
-                        Why are you being someone else?<br>
+                    <div class="macro hint" data-part="a" data-ocurrence="2" data-begins="17" data-ends="24">
+                        <h3>A2</h3>
+                        <div class="micro hint" data-begins="17" data-ends="20">
+                            You repeat the lie while I’m finding myself, you all talking about time<br>
+                            Why are you being someone else?<br>
+                            Why are you being someone else?<br>
+                        </div>
+                        <div class="micro hint" data-begins="21" data-ends="24">
+                            You repeat the lie while I’m finding myself, you all talking about timе<br>
+                            Being someone еlse<br>
+                            Why are you being someone else?<br>
+                        </div>
                     </div>
-                </div>
-                <div class="macro hint" data-part="b" data-ocurrence="1" data-begins="25" data-ends="33">
-                    <h3>B1</h3>
-                </div>
-                <div class="macro hint" data-part="intro" data-ocurrence="2" data-begins="34" data-ends="41">
-                    <h3>Intro2</h3>
-                </div>
-                <div class="macro hint" data-part="a" data-ocurrence="3" data-begins="42" data-ends="49">
-                    <h3>A3</h3>
-                </div>
-                <div class="macro hint" data-part="a" data-ocurrence="4" data-begins="50" data-ends="57">
-                    <h3>A4</h3>
-                </div>
-                <div class="macro hint" data-part="b" data-ocurrence="2" data-begins="58" data-ends="67">
-                    <h3>B2</h3>
+                    <div class="macro hint" data-part="b" data-ocurrence="1" data-begins="25" data-ends="33">
+                        <h3>B1</h3>
+                    </div>
+                    <div class="macro hint" data-part="intro" data-ocurrence="2" data-begins="34" data-ends="41">
+                        <h3>Intro2</h3>
+                    </div>
+                    <div class="macro hint" data-part="a" data-ocurrence="3" data-begins="42" data-ends="49">
+                        <h3>A3</h3>
+                    </div>
+                    <div class="macro hint" data-part="a" data-ocurrence="4" data-begins="50" data-ends="57">
+                        <h3>A4</h3>
+                    </div>
+                    <div class="macro hint" data-part="b" data-ocurrence="2" data-begins="58" data-ends="67">
+                        <h3>B2</h3>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <span id="tracktime">0 / 0</span>
+        <span id="globalTime"></span>
+        <span>Current bar: <span id="currentBar"></span></span>
+        <div id="navigation">
+            <input type="range" min="0" max="100" step="1" id="timeline" name="timeline" value="0" />
+            <fieldset id="parts">
+                <button class="skipTo part-intro" data-skip="0" data-duration="8" style="flex: 8;">Intro</button>
+                <button class="skipTo part-a" data-skip="8" data-duration="8" style="flex: 8;">Verso 1 <small>Part Ai</small></button>
+                <button class="skipTo part-a" data-skip="16" data-duration="8" style="flex: 8;">Verso 1 <small>Part Aii</small></button>
+                <button class="skipTo part-b" data-skip="24" data-duration="9" style="flex: 9;">Estribillo 1 <small>Part B</small></button>
+                <button class="skipTo part-intro" data-skip="33" data-duration="8" style="flex: 8;">Intro ii</button>
+                <button class="skipTo part-a" data-skip="41" data-duration="8" style="flex: 8;">Verso 2 <small>Part Aiii</small></button>
+                <button class="skipTo part-a" data-skip="49" data-duration="8" style="flex: 8;">Verso 2 <small>Part Aiv</small></button>
+                <button class="skipTo part-b" data-skip="57" data-duration="10" style="flex: 10;">Estribillo 2 <small>Part Bii</small></button>
+            </fieldset>
+        </div>
     </div>
 
-    <fieldset id="parts">
-        <label for="">Skip to</label>
-        <button class="skipTo" data-skip="0">Intro</button>
-        <button class="skipTo" data-skip="8">Part A</button>
-        <button class="skipTo" data-skip="24">Part B</button>
-        <button class="skipTo" data-skip="33">Intro ii</button>
-        <button class="skipTo" data-skip="41">Part A ii</button>
-        <button class="skipTo" data-skip="57">Part B ii</button>
-    </fieldset>
-
     <script>
+        const pickInstrumentButtons = document.querySelectorAll('.pickInstrument');
+
+        const appDiv = document.getElementById('app');
+        const onboardingDiv = document.getElementById('onboarding');
+        pickInstrumentButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                appDiv.classList.add('active');
+                onboardingDiv.classList.remove('active');
+            });
+        });
         // define bpm
         var bpm = 82;
         var beatSeconds = 60/bpm;
 
         document.getElementById("timeline").setAttribute("step", beatSeconds/10);
-
-        // define audio elements. these will be like different tracks
-        var audio1 = document.getElementById("audio1");
-        var audio2 = document.getElementById("audio2");
-        var audio3 = document.getElementById("audio3");
-        var audio4 = document.getElementById("audio4");
 
         // we need the duration to be global
         var audioDuration;
@@ -168,6 +245,7 @@
         var globalProgress;
         
         let bass;
+        let metronomeOn;
         let mutedBass;
         let mutedDrums;
         let mutedOther;
@@ -203,6 +281,24 @@
             preload: true,
             singleInstance: true
         });
+        PIXI.sound.add('click', {
+            url:  'src/click.mp3',
+            preload: true,
+            singleInstance: true,
+            volume: 0
+        });
+
+        function toggleMetronome(el) {
+            if (!metronomeOn) {
+                PIXI.sound._sounds['click'].volume = .5;
+                el.classList.add('active');
+                metronomeOn = true;
+            } else {
+                PIXI.sound._sounds['click'].volume = 0;
+                el.classList.remove('active');
+                metronomeOn = false;
+            }
+        }
 
         function muteBass(el) {
             if (!mutedBass) {
@@ -413,11 +509,16 @@
         let audioElements = [];
         let isPlaying = false;
 
-        function togglePlay() {
+        function togglePlay(el) {
             if (isPlaying) {
                 pauseAll();
             } else {
-                playAll();
+                skipIntent();
+            }
+            if (el.classList.contains('paused')) {
+                el.classList.remove('paused');
+            } else {
+                el.classList.add('paused');
             }
         }
 
@@ -443,10 +544,6 @@
 
                 // Attempt to play all audio elements
                 skipIntent();
-
-                // console.log(globalProgress);
-
-                isPlaying = true;
             }
         });
 
@@ -474,7 +571,8 @@
                 PIXI.sound._sounds['bass'],
                 PIXI.sound._sounds['other'],
                 PIXI.sound._sounds['vocals'],
-                PIXI.sound._sounds['drums']
+                PIXI.sound._sounds['drums'],
+                PIXI.sound._sounds['click']
             ];
 
             // Attempt to play all audio elements
@@ -522,7 +620,8 @@
                 PIXI.sound._sounds['bass'],
                 PIXI.sound._sounds['other'],
                 PIXI.sound._sounds['vocals'],
-                PIXI.sound._sounds['drums']
+                PIXI.sound._sounds['drums'],
+                PIXI.sound._sounds['click']
             ];
 
             // Attempt to play all audio elements
@@ -538,6 +637,7 @@
                         // console.log('Amount played: ', progress * 100 + '% of ', duration);
                         audioDuration = duration;
                         globalProgress = progress;
+                        console.log("song progress is", globalProgress);
                         // console.log("skipped to ", globalProgress);
                         currentTimeInS = Math.round((globalProgress) * duration);
                         const timeString = secondsToMinutesAndSeconds(currentTimeInS);
@@ -569,7 +669,8 @@
                 PIXI.sound._sounds['bass'],
                 PIXI.sound._sounds['other'],
                 PIXI.sound._sounds['vocals'],
-                PIXI.sound._sounds['drums']
+                PIXI.sound._sounds['drums'],
+                PIXI.sound._sounds['click']
             ];
 
             globalProgress = timeline.value;
@@ -587,9 +688,6 @@
 
             isPlaying = true;
         }
-        
-        const globalTimePrint = document.querySelector("#globalTime");
-
     </script>
 </body>
 </html>
