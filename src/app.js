@@ -309,7 +309,7 @@ function nowPlaying(){
     document.getElementById('currentBar').innerHTML = currentBar;
     if ((currentBar >= 1 && currentBar <= 8) || (currentBar >= 34 && currentBar <= 41)) {
         document.getElementById("metadata").className = "intro";
-    } else if ((currentBar >= 9 && currentBar <= 24) || (currentBar >= 42 && currentBar <= 58)) {
+    } else if ((currentBar >= 9 && currentBar <= 24) || (currentBar >= 42 && currentBar <= 57)) {
         document.getElementById("metadata").className = "a";
     } else if ((currentBar >= 25 && currentBar <= 34) || (currentBar >= 58 && currentBar <= 68)) {
         document.getElementById("metadata").className = "b";
