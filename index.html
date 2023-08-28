@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
     <link rel="stylesheet" href="http://unpkg.com/normalize.css">
     <link rel="stylesheet" href="src/style.css" type="text/css">
     <!-- PixiJS must be imported before @pixi/sound -->
@@ -148,6 +149,9 @@
             </div>
             <div id="navigation">
                 <input type="range" min="0" max="100" step="1" id="timeline" name="timeline" value="0" />
+                <div class="progress">
+                    <div class="bar" id="fakeProgressBar"></div>
+                </div>
                 <fieldset id="parts">
                     <button class="skipTo part-intro" data-skip="1" data-duration="8" style="flex: 8;">Intro</button>
                     <button class="skipTo part-a" data-skip="9" data-duration="8" style="flex: 8;">Verso 1 <small>Part Ai</small></button>

@@ -316,13 +316,9 @@ let isPlaying = false;
 function togglePlay(el) {
     if (isPlaying) {
         pauseAll();
+        document.getElementById("togglePlay").classList.add('paused');
     } else {
         skipIntent();
-    }
-    if (el.classList.contains('paused')) {
-        el.classList.remove('paused');
-    } else {
-        el.classList.add('paused');
     }
 }
 
@@ -331,13 +327,22 @@ timeline.addEventListener('mousedown', () => {
         PIXI.sound._sounds['bass'],
         PIXI.sound._sounds['other'],
         PIXI.sound._sounds['vocals'],
-        PIXI.sound._sounds['drums']
+        PIXI.sound._sounds['drums'],
+        PIXI.sound._sounds['click']
     ];
 
     // Attempt to play all audio elements
     audioElements.forEach(audio => audio.pause());
     isPlaying = false;
     isDragging = true;
+
+    if (isPlaying) {
+        document.getElementById("togglePlay").classList.add('paused');
+        //console.log("remove");
+    } else {
+        //document.getElementById("togglePlay").classList.remove('paused');
+        //console.log("add");
+    }
 });
 
 timeline.addEventListener('mouseup', () => {
@@ -394,6 +399,7 @@ function bufferIntent() {
                 // console.log('Amount played: ', progress * 100 + '% of ', duration);
                 audioDuration = duration;
                 globalProgress = progress;
+                document.getElementById("fakeProgressBar").style.width = (globalProgress * 100) + "%";
                 // console.log("progress percent", globalProgress);
                 currentTimeInS = Math.round((globalProgress) * duration);
                 const timeString = secondsToMinutesAndSeconds(currentTimeInS);
@@ -442,7 +448,8 @@ function skipIntent() {
                 // console.log('Amount played: ', progress * 100 + '% of ', duration);
                 audioDuration = duration;
                 globalProgress = progress;
-                console.log("song progress is", globalProgress);
+                //console.log("song progress is", globalProgress);
+                document.getElementById("fakeProgressBar").style.width = (globalProgress * 100) + "%";
                 // console.log("skipped to ", globalProgress);
                 currentTimeInS = Math.round((globalProgress) * duration);
                 const timeString = secondsToMinutesAndSeconds(currentTimeInS);
@@ -456,6 +463,13 @@ function skipIntent() {
                 console.log('Sound finished playing');
             });
             isPlaying = true;
+            if (isPlaying) {
+                document.getElementById("togglePlay").classList.remove('paused');
+                //console.log("remove");
+            } else {
+                document.getElementById("togglePlay").classList.add('paused');
+                //console.log("add");
+            }
         } else {
             setTimeout(checkPlayable, 2000); // Check again after 100ms
         }
