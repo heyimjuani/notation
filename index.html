@@ -16,16 +16,19 @@
 </head>
 <body>
     <div id="onboarding" class="active">
+        <small>Estás viendo un demo</small>
         <h1>Suddenly Driven</h1>
         <h2>Grace & Badlove</h2>
         <h3>¿Qué instrumento tocás?</h3>
         <div id="pick">
-            <button class="pickInstrument" id="bass" disabled>Bass</button>
-            <button class="pickInstrument" id="keyboard">Keyboard</button>
-            <button class="pickInstrument" id="vocals" disabled>Vocals</button>
-            <button class="pickInstrument" id="drums" disabled>Drums</button>
+            <button class="pickInstrument" id="bass" disabled>Bajo</button>
+            <button class="pickInstrument" id="harmonic">Armónico</button>
+            <button class="pickInstrument" id="vocals" disabled>Vocales</button>
+            <button class="pickInstrument" id="drums" disabled>Batería</button>
         </div>
-        <h6>Esto es un demo</h6>
+        <h6>Acá vamos a disponibilizar "canales" de notas o comentarios.</h6>
+        <h6>A cada uno le va a interesar algo distinto. </h6>
+        <h6>Clickeá en Armónico por ejemplo</h6>
     </div>
     <div id="app">
         <div id="actions">
@@ -87,7 +90,9 @@
                 <div id="structure">
                     <div class="demo">
                         <div id="placeholder" class="macro hint active">
+                            <h1>Suddenly Driven</h1>
                             <h3>Estructura</h3>
+                            <p>Acá se podría destacar la estructura base de la canción. <br>Objetivo: consenso y hablar el mismo idioma.</p>
                             <ul>
                                 <li>Intro: 8 compases</li>
                                 <li>Parte A: 16 compases</li>
@@ -97,11 +102,24 @@
                                 <li>Parte B ii: 8 + 2 compases</li>
                             </ul>
                             <button id="playAudio" onclick="bufferIntent()">Reproducir Audio</button>
+                            <p><small>Cuando estés listo apretá este botón.</small></p>
                         </div>
                         <div class="macro hint" data-part="intro" data-ocurrence="1" data-begins="1" data-ends="8">
-                            <div class="micro hint" data-begins="1" data-ends="6">
+                            <div class="micro hint" data-begins="1" data-ends="1">
                                 <h3>Intro</h3>
                                 <p>Penta de F#m</p>
+                            </div>
+                            <div class="micro hint" data-begins="2" data-ends="2">
+                                <h3>Multiplataforma</h3>
+                                <p>Funciona en compu y celu</p>
+                            </div>
+                            <div class="micro hint" data-begins="3" data-ends="4">
+                                <h3>Esta plataforma entiende de compases</h3>
+                                <p>Entonces podemos brindar información en el momento apropiado.</p>
+                            </div>
+                            <div class="micro hint" data-begins="5" data-ends="6">
+                                <h3>Seguí escuchando</h3>
+                                <p>Hay todavía más instrucciones</p>
                             </div>
                             <div class="micro hint" data-begins="7" data-ends="8">
                                 <h3>Intro</h3>
@@ -110,12 +128,12 @@
                         </div>
                         <div class="macro hint" data-part="a" data-ocurrence="1" data-begins="9" data-ends="16">
                             <div class="micro hint" data-begins="9" data-ends="12">
-                                <h3>F#m | Emaj7</h3>
-                                <p>Un compás cada uno</p>
+                                <h3>Lo que suena está dividido en capas</h3>
+                                <p>En este caso yo indiqué que soy del mundo harmónico, por eso la guitarra arriba. <br>Usá los botones de Mute, Solo y Metrónomo de arriba.</p>
                             </div>
                             <div class="micro hint" data-begins="13" data-ends="16">
-                                As the days go by I go evolving<br>
-                                You remain the same and there’s no one else to blame<br>
+                                Somos dueños del tiempo<br>
+                                Pausá, o usá los cuadraditos de abajo.<br>
                             </div>
                         </div>
                         <div class="macro hint" data-part="a" data-ocurrence="2" data-begins="17" data-ends="24">
@@ -132,19 +150,24 @@
                             </div>
                         </div>
                         <div class="macro hint" data-part="b" data-ocurrence="1" data-begins="25" data-ends="33">
-                            <h3>B1</h3>
+                            <h3>Hacé de cuenta que estás viendo stories</h3>
+                            <p>Clickeá en la parte derecha o izquierda de la pantalla</p>
                         </div>
                         <div class="macro hint" data-part="intro" data-ocurrence="2" data-begins="34" data-ends="41">
-                            <h3>Intro2</h3>
+                            <h3>F#m | Emaj7</h3>
+                            <p>Penta obligada</p>
                         </div>
                         <div class="macro hint" data-part="a" data-ocurrence="3" data-begins="42" data-ends="49">
-                            <h3>A3</h3>
+                            Somos dueños del tiempo<br>
+                            Pausá, o usá los cuadraditos de abajo.
                         </div>
                         <div class="macro hint" data-part="a" data-ocurrence="4" data-begins="50" data-ends="57">
-                            <h3>A4</h3>
+                            <h3>Esta plataforma entiende de compases</h3>
+                            <p>Entonces podemos brindar información en el momento apropiado.</p>
                         </div>
                         <div class="macro hint" data-part="b" data-ocurrence="2" data-begins="58" data-ends="67">
-                            <h3>B2</h3>
+                            <h3>Hacé de cuenta que estás viendo stories</h3>
+                            <p>Clickeá en la parte derecha o izquierda de la pantalla</p>
                         </div>
                     </div>
                 </div>
