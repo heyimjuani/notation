@@ -307,6 +307,13 @@ function nowPlaying(){
     // console.log(beatSeconds);
     currentBar = Math.ceil(((globalProgress) * audioDuration) / (beatSeconds * 4));
     document.getElementById('currentBar').innerHTML = currentBar;
+    if ((currentBar >= 1 && currentBar <= 8) || (currentBar >= 34 && currentBar <= 41)) {
+        document.getElementById("metadata").className = "intro";
+    } else if ((currentBar >= 9 && currentBar <= 24) || (currentBar >= 42 && currentBar <= 58)) {
+        document.getElementById("metadata").className = "a";
+    } else if ((currentBar >= 25 && currentBar <= 34) || (currentBar >= 58 && currentBar <= 68)) {
+        document.getElementById("metadata").className = "b";
+    }
     updateActiveClasses(currentBar);
 }
 
@@ -354,6 +361,35 @@ timeline.addEventListener('mouseup', () => {
         // Attempt to play all audio elements
         skipIntent();
     }
+});
+
+function nextBar() {
+    console.log(currentBar);
+    globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
+    // Attempt to play all audio elements
+    skipIntent();
+}
+
+const prevButton = document.getElementById('prevBar');
+let timerId;
+
+prevButton.addEventListener('click', function() {
+    if (timerId) {
+        clearTimeout(timerId);
+        currentBar -= 2;
+        globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
+        skipIntent();
+    } else {
+        currentBar--;
+        //console.log('Decreased by 1 to:', currentBar);
+        globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
+        skipIntent();
+    }
+
+    // Start a new timer
+    timerId = setTimeout(function() {
+        timerId = null;
+    }, 1000);
 });
 
 function myFunction(parameter) {
@@ -411,6 +447,8 @@ function bufferIntent() {
             });
             instance.on('end', function() {
                 console.log('Sound finished playing');
+                isPlaying = false;
+                document.getElementById("togglePlay").classList.add('paused');
             });
             isPlaying = true;
         } else {
@@ -461,6 +499,8 @@ function skipIntent() {
             });
             instance.on('end', function() {
                 console.log('Sound finished playing');
+                isPlaying = false;
+                document.getElementById("togglePlay").classList.add('paused');
             });
             isPlaying = true;
             if (isPlaying) {

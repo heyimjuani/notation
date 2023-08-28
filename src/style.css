@@ -120,18 +120,39 @@ body {
     padding: 15px 15px 0 0;
     position: relative;
 }
+.skipBar {
+    top: 0;
+    position: absolute;
+    bottom: 0;
+    border: none;
+    width: 25%;
+    border-radius: 10px;
+    background: none;
+}
+#nextBar {
+    right: 0;
+}
+#nextBar:active {
+    background: linear-gradient(270deg, rgba(0,0,0,.2) 0%, rgba(0, 0, 0, 0.00) 100%);
+}
+#prevBar {
+    left: 0;
+}
+#prevBar:active {
+    background: linear-gradient(90deg, rgba(0,0,0,.2) 0%, rgba(0, 0, 0, 0.00) 100%);
+}
 #tracktime {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    color: #475B70;
-    border: 1px solid #475B70;
+    color: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.2);
     border-radius: 10px;
     padding: 5px 10px;
 }
 #structure {
     width: 100%;
-    background: #333E49;
+    background-color: #333E49;
     display: flex;
     align-items: center;
     justify-items: center;
@@ -139,6 +160,17 @@ body {
     border-radius: 10px;
     justify-content: space-around;
     text-align: center;
+    transition: background-color ease-in-out .25s;
+}
+
+.intro #structure {
+    background-color: #333E49;
+}
+.a #structure {
+    background-color: #331E3A;
+}
+.b #structure {
+    background-color: #3E232F;
 }
 .macro.hint:not(.active),
 .macro.hint.active .hint.micro:not(.active) {
