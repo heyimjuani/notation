@@ -15,16 +15,50 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="mixer">
+        <div class="container">
+            <div>
+                <fieldset>
+                    <button class="pickInstrument bass" id="bass-mixer"><svg xmlns="http://www.w3.org/2000/svg" width="23" height="21" viewBox="0 0 23 21" fill="none">
+                        <path d="M16.2382 1.28137C16.4321 1.66334 15.7362 2.72444 15.1954 2.99899C14.7332 3.2336 13.2304 3.28873 13.0364 2.90676C12.8425 2.52478 13.5215 1.31309 14.1326 1.00281C14.7438 0.692528 16.0443 0.899393 16.2382 1.28137Z" fill="#626262"/>
+                        <path d="M11.6868 5.07419C12.2276 4.79964 12.9236 3.73853 12.7297 3.35656C12.5357 2.97459 11.2352 2.76772 10.6241 3.078C10.013 3.38828 9.33399 4.59998 9.5279 4.98195C9.72181 5.36392 11.2247 5.30879 11.6868 5.07419Z" fill="#626262"/>
+                        <path d="M8.17882 7.14938C8.71964 6.87483 9.41558 5.81373 9.22166 5.43175C9.02775 5.04978 7.72724 4.84291 7.11611 5.15319C6.50497 5.46347 5.826 6.67517 6.01991 7.05714C6.21382 7.43912 7.71668 7.38398 8.17882 7.14938Z" fill="#626262"/>
+                        <path d="M4.67028 9.22461C5.21109 8.95006 5.90703 7.88895 5.71312 7.50698C5.51921 7.12501 4.21869 6.91814 3.60756 7.22842C2.99643 7.5387 2.31746 8.7504 2.51137 9.13237C2.70528 9.51434 4.20814 9.45921 4.67028 9.22461Z" fill="#626262"/>
+                        <path d="M22.2724 5.39903C22.2724 7.27211 20.754 8.79055 18.8809 8.79055H16.6188C16.1466 8.79055 15.3786 10.3487 14.5206 12.0891C13.3245 14.5156 11.9537 17.2966 10.9663 16.7041C8.42238 15.1778 5.98375 17.8393 4.1221 19.8711C3.7404 20.2877 3.38293 20.6779 3.0538 21L0.227539 18.1737L3.05273 15.5736C3.6187 15.0083 3.61917 14.4431 3.61917 14.4431C2.48858 12.1821 2.48731 11.4284 3.05256 11.0516L16.5016 2.98214C17.1138 2.37941 17.9539 2.00751 18.8809 2.00751C20.754 2.00751 22.2724 3.52595 22.2724 5.39903Z" fill="#626262"/>
+                      </svg></button>
+                    <button class="muteBtn" onclick="muteBass(this)">M</button>
+                    <button class="soloBtn" onclick="toggleSoloBass(this)">S</button>
+                </fieldset>
+            
+                <fieldset>
+                    <button class="pickInstrument drums" id="drums-mixer"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none">
+                        <path d="M21.5359 2.26991C22.0129 1.95624 22.1461 1.3203 21.8324 0.843351C21.5188 0.366398 20.8828 0.233195 20.4059 0.546867L15.907 3.49023C14.4289 3.24101 12.7617 3.12499 11 3.12499C4.92422 3.12499 0 4.49999 0 7.93749V14.8125C0 16.1574 1.17734 17.3391 3.09375 18.1941V13.7812C3.09375 13.2098 3.55352 12.75 4.125 12.75C4.69648 12.75 5.15625 13.2098 5.15625 13.7812V18.9117C6.57422 19.2941 8.21133 19.5348 9.96875 19.6035V15.1562C9.96875 14.5848 10.4285 14.125 11 14.125C11.5715 14.125 12.0312 14.5848 12.0312 15.1562V19.6035C13.7887 19.5348 15.4258 19.2941 16.8438 18.9117V13.7812C16.8438 13.2098 17.3035 12.75 17.875 12.75C18.4465 12.75 18.9062 13.2098 18.9062 13.7812V18.1941C20.8227 17.3391 22 16.1574 22 14.8125V7.93749C22 6.17148 20.7023 4.95116 18.6141 4.18202L21.5316 2.26991H21.5359ZM13.2086 5.25624L10.4328 7.07382C9.95586 7.38749 9.82266 8.02343 10.1363 8.50038C10.45 8.97734 11.0859 9.11054 11.5629 8.79687L16.3367 5.66874C16.9684 5.80624 17.5355 5.96952 18.0297 6.16288C19.6969 6.81171 19.9375 7.48202 19.9375 7.93749C19.9375 7.97187 19.8215 8.67655 17.9609 9.48007C16.2895 10.2019 13.8359 10.6875 11 10.6875C8.16406 10.6875 5.71055 10.2019 4.03906 9.48007C2.17852 8.67655 2.0625 7.97187 2.0625 7.93749C2.0625 7.48202 2.30313 6.81171 3.97031 6.16288C5.61172 5.52694 8.06953 5.18749 11 5.18749C11.7734 5.18749 12.5082 5.20898 13.2086 5.25624Z" fill="#626262"/>
+                      </svg></button>
+                    <button class="muteBtn" onclick="muteDrums(this)">M</button>
+                    <button class="soloBtn" onclick="toggleSoloDrums(this)">S</button>
+                </fieldset>
+            
+                <fieldset>
+                    <button class="pickInstrument vocals" id="vocals-mixer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="22" viewBox="0 0 16 22" fill="none">
+                        <path d="M3.99984 4.125V11C3.99984 13.2773 5.7915 15.125 7.99984 15.125C10.2082 15.125 11.9998 13.2773 11.9998 11H8.6665C8.29984 11 7.99984 10.6906 7.99984 10.3125C7.99984 9.93437 8.29984 9.625 8.6665 9.625H11.9998V8.25H8.6665C8.29984 8.25 7.99984 7.94063 7.99984 7.5625C7.99984 7.18437 8.29984 6.875 8.6665 6.875H11.9998V5.5H8.6665C8.29984 5.5 7.99984 5.19063 7.99984 4.8125C7.99984 4.43437 8.29984 4.125 8.6665 4.125H11.9998C11.9998 1.84766 10.2082 0 7.99984 0C5.7915 0 3.99984 1.84766 3.99984 4.125ZM13.3332 10.3125V11C13.3332 14.0379 10.9457 16.5 7.99984 16.5C5.054 16.5 2.6665 14.0379 2.6665 11V9.28125C2.6665 8.70977 2.22067 8.25 1.6665 8.25C1.11234 8.25 0.666504 8.70977 0.666504 9.28125V11C0.666504 14.8285 3.42484 17.991 6.99984 18.4937V19.9375H4.99984C4.44567 19.9375 3.99984 20.3973 3.99984 20.9688C3.99984 21.5402 4.44567 22 4.99984 22H7.99984H10.9998C11.554 22 11.9998 21.5402 11.9998 20.9688C11.9998 20.3973 11.554 19.9375 10.9998 19.9375H8.99984V18.4937C12.5748 17.991 15.3332 14.8285 15.3332 11V9.28125C15.3332 8.70977 14.8873 8.25 14.3332 8.25C13.779 8.25 13.3332 8.70977 13.3332 9.28125V10.3125Z" fill="#626262"/>
+                      </svg></button>
+                    <button class="muteBtn" onclick="muteVocals(this)">M</button>
+                    <button class="soloBtn" onclick="toggleSoloVocals(this)">S</button>
+                </fieldset>
+            </div>
+            <button id="closeMixer">Close</button>
+        </div>
+    </div>
     <div id="onboarding" class="active">
         <small>Estás viendo un demo</small>
         <h1>Suddenly Driven</h1>
         <h2>Grace & Badlove</h2>
         <h3>¿Qué instrumento tocás?</h3>
         <div id="pick">
-            <button class="pickInstrument" id="bass" disabled>Bajo</button>
-            <button class="pickInstrument" id="harmonic">Armónico</button>
-            <button class="pickInstrument" id="vocals" disabled>Vocales</button>
-            <button class="pickInstrument" id="drums" disabled>Batería</button>
+            <button class="pickInstrument bass" id="bass-main" disabled>Bajo</button>
+            <button class="pickInstrument harmonic" id="harmonic-main">Armónico</button>
+            <button class="pickInstrument vocals" id="vocals-main" disabled>Vocales</button>
+            <button class="pickInstrument drums" id="drums-main" disabled>Batería</button>
         </div>
         <h6>Acá vamos a disponibilizar "canales" de notas o comentarios.</h6>
         <h6>A cada uno le va a interesar algo distinto. </h6>
@@ -33,7 +67,9 @@
     <div id="app">
         <div id="actions">
             <div class="buttonContainer">
-                <button id="changeInstrument" class="harmonic"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none"><path opacity="0.3" d="M19.9824 0.3029C19.5785 -0.100967 18.9253 -0.100967 18.5256 0.3029L16.4586 2.3652C16.3555 2.46832 16.2739 2.59291 16.2223 2.7304L15.5605 4.49195L12.2301 7.826C10.292 6.56284 7.96288 6.52847 6.60064 7.89474C6.12793 8.36735 5.82712 8.95167 5.68101 9.59614C5.52201 10.3094 4.86023 10.9152 4.12969 10.9538C3.02958 11.0097 2.01112 11.4135 1.23761 12.1826C-0.687581 14.1117 -0.326608 17.5918 2.0412 19.9592C4.40901 22.3265 7.88982 22.6874 9.81501 20.7626C10.5842 19.9936 10.9925 18.971 11.044 17.8711C11.0827 17.1407 11.6886 16.4834 12.402 16.3201C13.0466 16.174 13.631 15.869 14.1037 15.4007C15.4703 14.0344 15.4359 11.71 14.1725 9.77229L17.5072 6.43824L19.2691 5.77659C19.4066 5.72503 19.5312 5.6434 19.6343 5.54028L21.697 3.47798C22.101 3.07412 22.101 2.42105 21.697 2.02148L19.9824 0.3029ZM8.93836 11.0011C9.48543 11.0011 10.0101 11.2184 10.3969 11.6051C10.7837 11.9919 11.0011 12.5164 11.0011 13.0634C11.0011 13.6103 10.7837 14.1349 10.3969 14.5216C10.0101 14.9084 9.48543 15.1257 8.93836 15.1257C8.3913 15.1257 7.86665 14.9084 7.47981 14.5216C7.09298 14.1349 6.87566 13.6103 6.87566 13.0634C6.87566 12.5164 7.09298 11.9919 7.47981 11.6051C7.86665 11.2184 8.3913 11.0011 8.93836 11.0011Z" fill="white"/></svg></button>
+                <button id="changeInstrument" class="harmonic"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M19 12V1.10002C21.2822 1.56329 23 3.58104 23 6V18C23 20.7614 20.7614 23 18 23H17V13H18C18.5523 13 19 12.5523 19 12ZM16 13H15C14.4477 13 14 12.5523 14 12V1L10 1V12C10 12.5523 9.55229 13 9 13H8V23H16V13ZM7 13V23H6C3.23858 23 1 20.7614 1 18V6C1 3.58104 2.71776 1.56329 5 1.10002V12C5 12.5523 5.44772 13 6 13H7ZM9 0H15H18C21.3137 0 24 2.68629 24 6V18C24 21.3137 21.3137 24 18 24H6C2.68629 24 0 21.3137 0 18V6C0 2.68629 2.68629 0 6 0H9Z" fill="#626262"/>
+                  </svg></button>
                 <button id="muteOther" class="muteBtn" onclick="muteOther(this)">M</button>
                 <button id="soloOther" class="soloBtn" onclick="toggleSoloOther(this)">S</button>
                 <button id="toggleMetronome" onclick="toggleMetronome(this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="20" viewBox="0 0 13 20" fill="none">
@@ -59,30 +95,6 @@
         <div id="visor">
             <!--button id="resumeAudio" onclick="resumeAll()">Resume Audio</button>
             <button id="pauseAudio" onclick="pauseAll()">Pause Audio</button-->
-            <div id="mixer">
-                <fieldset>
-                    <label>Bass</label>
-                    <button id="muteBass" class="muteBtn" onclick="muteBass(this)">M</button>
-                    <button id="soloBass" class="soloBtn" onclick="toggleSoloBass(this)">S</button>
-                </fieldset>
-            
-                <fieldset>
-                    <label>Drums</label>
-                    <button id="muteDrums" class="muteBtn" onclick="muteDrums(this)">M</button>
-                    <button id="soloDrums" class="soloBtn" onclick="toggleSoloDrums(this)">S</button>
-                </fieldset>
-            
-                <fieldset>
-                    <label>Vocals</label>
-                    <button id="muteVocals" class="muteBtn" onclick="muteVocals(this)">M</button>
-                    <button id="soloVocals" class="soloBtn" onclick="toggleSoloVocals(this)">S</button>
-                </fieldset>
-            
-                <fieldset>
-                    <label>Harmonic</label>
-                </fieldset>
-            </div>
-
             <div id="metadata" class="">
                 <button id="nextBar" class="skipBar" onclick="nextBar()"></button>
                 <button id="prevBar" class="skipBar"></button>

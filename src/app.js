@@ -44,7 +44,22 @@ let soloDrums;
 let soloOther;
 let soloVocals;
 
+let audioElements = [];
+let isPlaying = false;
+
 const skipToElements = document.querySelectorAll('.skipTo');
+
+const mixerOpen = document.getElementById("changeInstrument");
+const mixerClose = document.getElementById("closeMixer");
+const mixerDiv = document.getElementById('mixer');
+
+mixerOpen.addEventListener('click', function() {
+    mixerDiv.classList.toggle('active');
+});
+
+mixerClose.addEventListener('click', function() {
+    mixerDiv.classList.toggle('active');
+});
 
 function navigationStates() {
     skipToElements.forEach((element, index) => {
@@ -316,9 +331,6 @@ function nowPlaying(){
     }
     updateActiveClasses(currentBar);
 }
-
-let audioElements = [];
-let isPlaying = false;
 
 function togglePlay(el) {
     if (isPlaying) {
