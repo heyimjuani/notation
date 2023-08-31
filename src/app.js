@@ -304,7 +304,7 @@ function updateActiveClassesRecursive(element, currentBar) {
     }
 
     // Recursively check nested elements
-    const nestedElements = element.querySelectorAll('.hint');
+    const nestedElements = element.querySelectorAll('.micro');
     nestedElements.forEach(nestedElement => {
         updateActiveClassesRecursive(nestedElement, currentBar);
     });
@@ -312,10 +312,66 @@ function updateActiveClassesRecursive(element, currentBar) {
 
 // Update the active classes based on the currentBar value
 function updateActiveClasses(currentBar) {
-    const elements = document.querySelectorAll('.hint');
+    const elements = document.querySelectorAll('.micro');
     elements.forEach(element => {
         updateActiveClassesRecursive(element, currentBar);
     });
+}
+
+let hasFunctionRun = false;
+
+function drop(direction) {
+    const countDiv = document.querySelectorAll('.numbers');
+    countDiv.forEach(element => {
+        element.innerHTML = "";
+        const numbers = direction === 'down' ? [4, 3, 2, 1] : [1, 2, 3, 4];
+
+        numbers.forEach((number, index) => {
+            const span = document.createElement('span');
+            span.classList.add("singleNumber");
+            span.textContent = number;
+            element.appendChild(span);
+        });
+        countFunction(element);
+    });
+}
+
+function countFunction(element) {
+    const countDiv = document.querySelectorAll('.count');
+    const spans = element.querySelectorAll('.singleNumber');
+    let currentIndex = 0;
+  
+    function setActiveSpan() {
+      spans.forEach(span => {
+        span.classList.remove('active');
+      });
+      spans[currentIndex].classList.add('active');
+  
+      currentIndex = (currentIndex + 1) % spans.length;
+    }
+  
+    // Initial activation
+    setActiveSpan();
+  
+    if (!hasFunctionRun) {
+        let intervalCounter = 0;
+        const maxOccurrences = 4;
+
+        function intervalCallback() {
+            intervalCounter++;
+            //console.log('Interval occurrence:', intervalCounter);
+
+            // Your interval logic here
+            setActiveSpan();
+
+            if (intervalCounter >= maxOccurrences) {
+                clearInterval(countTransition);
+                intervalCounter = 0;
+                console.log('Interval stopped after', maxOccurrences, 'occurrences');
+            }
+        }
+        const countTransition = setInterval(intervalCallback, beatSeconds * 1000); // Adjust the interval time as needed
+    }
 }
 
 function nowPlaying(){
@@ -329,7 +385,23 @@ function nowPlaying(){
     } else if ((currentBar >= 25 && currentBar <= 34) || (currentBar >= 58 && currentBar <= 68)) {
         document.getElementById("metadata").className = "b";
     }
+
     updateActiveClasses(currentBar);
+
+    if (!hasFunctionRun && ((currentBar == 41) || (currentBar == 44))) {
+        drop("down");
+        hasFunctionRun = true;
+        setTimeout(() => {
+            hasFunctionRun = false;
+        }, beatSeconds * 4 * 1000);
+    }
+    if (!hasFunctionRun && ((currentBar == 45))) {
+        drop("up");
+        hasFunctionRun = true;
+        setTimeout(() => {
+            hasFunctionRun = false;
+        }, beatSeconds * 4 * 1000);
+    }
 }
 
 function togglePlay(el) {
@@ -572,7 +644,7 @@ fetch('src/songs.json')
     // Loop through hints of the selected song and generate HTML
     selectedSong.hints.forEach(hint => {
         const hintElement = document.createElement('div');
-        hintElement.classList.add('micro', 'hint');
+        hintElement.classList.add('micro', hint.type);
 
         hintElement.innerHTML = `
             <h3>${hint.title}</h3>

@@ -229,17 +229,28 @@ body {
     background-color: #3E232F;
 }
 .macro.hint:not(.active),
-.hint.micro:not(.active) {
+.hint.micro:not(.active),
+.count.micro:not(.active) {
     display: none;
 }
 .macro.hint.active {
     display: block;
 }
-.hint.micro.active {
+.hint.micro.active,
+.count.micro.active {
     display: block !important;
 }
-.micro.hint {
+.micro.hint,
+.count.hint {
     text-align: center;
+}
+.count span {
+    font-size: 68px;
+    margin: 0 40px;
+    opacity: .3;
+}
+.count span.active {
+    opacity: 1;
 }
 .muteBtn, .soloBtn {
     font-weight: 600;
