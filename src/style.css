@@ -122,6 +122,26 @@ body {
     padding: 0;
     cursor: pointer;
     text-align: center;
+    transition: border-color ease-in-out .1s, color ease-in-out .1s;
+}
+#actions button:not(.active):hover,
+#mixer button:not(.active):hover {
+    border-color: #fff;
+    color: #fff;
+}
+#actions button path,
+#mixer button path {
+    transition: fill ease-in-out .1s, opacity ease-in-out .1s;
+}
+#actions button:hover path,
+#mixer button:hover path {
+    fill: #fff !important;
+    opacity: 1;
+}
+
+#actions button:hover g,
+#mixer button:hover g {
+    opacity: 1;
 }
 
 .progress {
@@ -209,13 +229,13 @@ body {
     background-color: #3E232F;
 }
 .macro.hint:not(.active),
-.macro.hint.active .hint.micro:not(.active) {
+.hint.micro:not(.active) {
     display: none;
 }
 .macro.hint.active {
     display: block;
 }
-.macro.hint.active .hint.micro.active {
+.hint.micro.active {
     display: block !important;
 }
 .micro.hint {

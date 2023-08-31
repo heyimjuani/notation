@@ -559,3 +559,32 @@ function resumeAll() {
 
     isPlaying = true;
 }
+
+const hintsContainer = document.getElementById('hintsContainer');
+const selectedSongIndex = 0; // Change this index as needed
+
+// Load songs data from the JSON file
+fetch('src/songs.json')
+.then(response => response.json())
+.then(songsData => {
+    const selectedSong = songsData[selectedSongIndex];
+
+    // Loop through hints of the selected song and generate HTML
+    selectedSong.hints.forEach(hint => {
+        const hintElement = document.createElement('div');
+        hintElement.classList.add('micro', 'hint');
+
+        hintElement.innerHTML = `
+            <h3>${hint.title}</h3>
+            ${hint.content}
+        `;
+        // Set "data-begins" and "data-ends" attributes
+        hintElement.setAttribute('data-begins', hint.barStart);
+        hintElement.setAttribute('data-ends', hint.barEnd);
+
+        hintsContainer.appendChild(hintElement);
+    });
+})
+.catch(error => {
+    console.error('Error loading JSON:', error);
+});

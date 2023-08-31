@@ -1,0 +1,91 @@
+[
+  {
+    "songTitle": "Suddenly Driven",
+    "hints": [
+      {
+        "title": "Intro",
+        "content": "<p>Penta de F#m</p>",
+        "barStart": 1,
+        "barEnd": 1
+      },
+      {
+        "title": "Multiplataforma",
+        "content": "<p>Funciona en compu y celu</p>",
+        "barStart": 2,
+        "barEnd": 2
+      },
+      {
+        "title": "Esta plataforma entiende de compases",
+        "content": "<p>Entonces podemos brindar información en el momento apropiado.</p>",
+        "barStart": 3,
+        "barEnd": 4
+      },
+      {
+        "title": "Seguí escuchando",
+        "content": "<p>Van a aparecer otras pistas</p>",
+        "barStart": 5,
+        "barEnd": 6
+      },
+      {
+        "title": "Intro",
+        "content": "<p>Turnaround</p>",
+        "barStart": 7,
+        "barEnd": 8
+      },
+      {
+        "title": "Lo que suena está dividido en capas",
+        "content": "<p>En este caso yo indiqué que soy del mundo harmónico, por eso la guitarra arriba. <br>Usá los botones de Mute, Solo y Metrónomo de arriba.</p>",
+        "barStart": 9,
+        "barEnd": 12
+      },
+      {
+        "title": "Somos dueños del tiempo",
+        "content": "<p>Pausá, o usá los cuadraditos de abajo.</p>",
+        "barStart": 13,
+        "barEnd": 16
+      },
+      {
+        "title": "Verso 2",
+        "content": "<p>You repeat the lie while I’m finding myself, you all talking about time<br>Why are you being someone else?<br>Why are you being someone else?<br></p>",
+        "barStart": 17,
+        "barEnd": 20
+      },
+      {
+        "title": "Verso 2",
+        "content": "<p>You repeat the lie while I’m finding myself, you all talking about timе<br>Being someone еlse<br>Why are you being someone else?</p>",
+        "barStart": 21,
+        "barEnd": 24
+      },
+      {
+        "title": "Hacé de cuenta que estás viendo stories",
+        "content": "<p>Clickeá en la parte derecha o izquierda de la pantalla</p>",
+        "barStart": 25,
+        "barEnd": 33
+      },
+      {
+        "title": "Intro II",
+        "content": "<p>F#m | Emaj7. Penta obligada.</p>",
+        "barStart": 34,
+        "barEnd": 41
+      },
+      {
+        "title": "Somos dueños del tiempo",
+        "content": "<p>Pausá, o usá los cuadraditos de abajo.</p>",
+        "barStart": 42,
+        "barEnd": 49
+      },
+      {
+        "title": "Esta plataforma entiende de compases",
+        "content": "<p>Entonces podemos brindar información en el momento apropiado.</p>",
+        "barStart": 50,
+        "barEnd": 57
+      },
+      {
+        "title": "Hacé de cuenta que estás viendo stories",
+        "content": "<p>Clickeá en la parte derecha o izquierda de la pantalla</p>",
+        "barStart": 58,
+        "barEnd": 67
+      }
+    ]
+  }
+]
