@@ -70,6 +70,27 @@
         "type": "hint",
         "content": "<p>Clickeá en la parte derecha o izquierda de la pantalla</p>",
         "barStart": 25,
+        "barEnd": 30
+      },
+      {
+        "title": "Sacar bombo",
+        "type": "count",
+        "content": "<div class='numbers'></div>",
+        "barStart": 31,
+        "barEnd": 31
+      },
+      {
+        "title": "2 compases de aire, quedan los tops",
+        "type": "hint",
+        "content": "<p>Queremos generar un contraste fuerte cuando volvamos</p>",
+        "barStart": 32,
+        "barEnd": 32
+      },
+      {
+        "title": "Beat vuelve en",
+        "type": "count",
+        "content": "<div class='numbers'></div>",
+        "barStart": 33,
         "barEnd": 33
       },
       {

@@ -388,14 +388,14 @@ function nowPlaying(){
 
     updateActiveClasses(currentBar);
 
-    if (!hasFunctionRun && ((currentBar == 41) || (currentBar == 44))) {
+    if (!hasFunctionRun && ((currentBar == 41) || (currentBar == 44) || (currentBar == 31))) {
         drop("down");
         hasFunctionRun = true;
         setTimeout(() => {
             hasFunctionRun = false;
         }, beatSeconds * 4 * 1000);
     }
-    if (!hasFunctionRun && ((currentBar == 45))) {
+    if (!hasFunctionRun && ((currentBar == 45) || (currentBar == 33))) {
         drop("up");
         hasFunctionRun = true;
         setTimeout(() => {
