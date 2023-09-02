@@ -387,7 +387,9 @@ function nowPlaying(){
     }
 
     if (currentBar >= 3 && currentBar <= 4) {
-        document.getElementById("metadata").className = "light";
+        document.getElementById("metadata").classList.add("light");
+    } else {
+        document.getElementById("metadata").classList.remove("light");
     }
 
     updateActiveClasses(currentBar);
@@ -451,33 +453,67 @@ timeline.addEventListener('mouseup', () => {
     }
 });
 
+let infoShown = false;
+
 function nextBar() {
-    console.log(currentBar);
-    globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
-    // Attempt to play all audio elements
-    skipIntent();
+    if (currentBar && !infoShown) {
+        //console.log(currentBar);
+        globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
+        // Attempt to play all audio elements
+        skipIntent();
+    } 
+    if (infoShown) {
+        document.getElementById("extra").classList.toggle("current");
+        document.getElementById("placeholder").classList.toggle("current");
+    }
+    if (!currentBar) {
+        document.getElementById("placeholder").classList.toggle("active");
+        document.getElementById("extra").classList.toggle("active");
+    }
 }
 
 const prevButton = document.getElementById('prevBar');
 let timerId;
 
 prevButton.addEventListener('click', function() {
-    if (timerId) {
-        clearTimeout(timerId);
-        currentBar -= 2;
-        globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
-        skipIntent();
-    } else {
-        currentBar--;
-        //console.log('Decreased by 1 to:', currentBar);
-        globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
-        skipIntent();
+    if (currentBar >= 2 && !infoShown) {
+        if (timerId) {
+            clearTimeout(timerId);
+            currentBar -= 2;
+            globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
+            skipIntent();
+        } else {
+            currentBar--;
+            //console.log('Decreased by 1 to:', currentBar);
+            globalProgress = ((currentBar * beatSeconds * 4) / audioDuration) * 100;
+            skipIntent();
+        }
+    } 
+    if (infoShown) {
+        document.getElementById("extra").classList.toggle("current");
+        document.getElementById("placeholder").classList.toggle("current");
+    }
+    if (!currentBar) {
+        document.getElementById("placeholder").classList.toggle("active");
+        document.getElementById("extra").classList.toggle("active");
     }
 
     // Start a new timer
     timerId = setTimeout(function() {
         timerId = null;
     }, 1000);
+});
+
+const toggleInfo = document.getElementById('toggleInfo');
+toggleInfo.addEventListener('click', function() {
+    document.getElementById("app").classList.toggle("infoMode");
+    if (!infoShown) {
+        document.getElementById("placeholder").classList.add("current");
+    } else {
+        document.getElementById("placeholder").classList.remove("current");
+        document.getElementById("extra").classList.remove("current");
+    }
+    infoShown = !infoShown;
 });
 
 function myFunction(parameter) {
@@ -490,13 +526,15 @@ const skipButtons = document.querySelectorAll('.skipTo');
 
 // Attach event listeners to each button
 skipButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const parameter = button.getAttribute('data-skip');
-        // console.log("skip to", parameter);
-        globalProgress = (((parameter-1) * beatSeconds * 4) / audioDuration) * 100;
-        // console.log("plz skip to ", globalProgress);
-        skipIntent();
-    });
+    if (currentBar) {
+        button.addEventListener('click', function() {
+            const parameter = button.getAttribute('data-skip');
+            // console.log("skip to", parameter);
+            globalProgress = (((parameter-1) * beatSeconds * 4) / audioDuration) * 100;
+            // console.log("plz skip to ", globalProgress);
+            skipIntent();
+        });
+    }
 });
 
 function bufferIntent() {
@@ -539,6 +577,7 @@ function bufferIntent() {
                 document.getElementById("togglePlay").classList.add('paused');
             });
             isPlaying = true;
+            document.getElementById("toggleInfo").classList.remove("hidden");
         } else {
             setTimeout(checkPlayable, 2000); // Check again after 100ms
         }
@@ -655,6 +694,9 @@ fetch('src/songs.json')
             hintElement.classList.add("hasScore");
             hintElement.innerHTML += `<div id='${hint.score}' class='score'></div>`
         }
+        if (hint.hasOwnProperty("part")) {
+            hintElement.setAttribute("data-part", hint.part);
+        }
         hintElement.innerHTML += `
             <h3>${hint.title}</h3>
             ${hint.content}
@@ -684,7 +726,7 @@ fetch('src/songs.json')
     renderer.resize(500, 120);
     const context = renderer.getContext();
     
-    // Create a stave of width 400 at position 10, 40 on the canvas.
+    // Create a stave of width 500 at position 0, 0 on the canvas.
     const stave = new Stave(0, 0, 500);
     
     // Add a clef and time signature.
@@ -738,19 +780,28 @@ fetch('src/songs.json')
     console.error('Error loading JSON:', error);
 });
 
+let targetLane;
 document.getElementById('drums-mixer').addEventListener('click', (event) => {
-    hintsContainer.innerHTML = "";
-    const changeTo = event.target.getAttribute('data-instrument');
+    event.preventDefault;
+    targetLane = event.target.getAttribute('data-instrument');
     
+    hintsContainer.innerHTML = "";
+    console.log("logged " + targetLane);
+
     fetch('src/songs.json')
     .then(response => response.json())
     .then(songsData => {
-        const selectedSong = songsData[selectedSongIndex].instruments.find(instrument => instrument.name === changeTo);
+        const selectedSong = songsData[selectedSongIndex].instruments.find(instrument => instrument.name === targetLane);
 
         // Loop through hints of the selected song and generate HTML
         selectedSong.hints.forEach(hint => {
             const hintElement = document.createElement('div');
             hintElement.classList.add('micro', hint.type);
+            if (hint.hasOwnProperty("part")) {
+                hintElement.setAttribute("data-part", hint.part);
+            } else {
+                hintElement.setAttribute("data-part", "Suddenly driven");
+            }
             hintElement.innerHTML += `
                 <h3>${hint.title}</h3>
                 ${hint.content}
@@ -766,3 +817,7 @@ document.getElementById('drums-mixer').addEventListener('click', (event) => {
         console.error('Error loading JSON:', error);
     });
 });
+
+if (!currentBar) {
+    document.getElementById("toggleInfo").classList.add("hidden");
+}

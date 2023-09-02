@@ -6,159 +6,181 @@
         "name": "harmonic",
         "hints": [
           {
-            "title": "Intro",
+            "title": "F#m | Emaj7",
             "type": "hint",
-            "content": "<p>F#m | Emaj7. Penta F#m obligada.</p>",
+            "content": "<p>Obligado penta F#m.</p>",
             "barStart": 1,
-            "barEnd": 1
+            "barEnd": 1,
+            "part": "intro"
           },
           {
             "title": "Multiplataforma",
             "type": "hint",
             "content": "<p>Funciona en compu y celu</p>",
             "barStart": 2,
-            "barEnd": 2
+            "barEnd": 2,
+            "part": "intro"
           },
           {
-            "title": "Esta plataforma entiende de compases",
+            "title": "Entiende de compases y partituras",
             "type": "hint",
             "score": "vexflow",
             "content": "<p>Entonces podemos brindar información en el momento apropiado.</p>",
             "barStart": 3,
-            "barEnd": 4
+            "barEnd": 4,
+            "part": "intro"
           },
           {
             "title": "Seguí escuchando",
             "type": "hint",
             "content": "<p>Van a aparecer otras pistas</p>",
             "barStart": 5,
-            "barEnd": 6
+            "barEnd": 6,
+            "part": "intro"
           },
           {
-            "title": "Intro - turnaround",
+            "title": "Turnaround",
             "type": "hint",
             "content": "<p>Dm Bm7 | C#7</p>",
             "barStart": 7,
-            "barEnd": 8
+            "barEnd": 8,
+            "part": "intro"
           },
           {
             "title": "Hay capas y hay un mixer",
             "type": "hint",
             "content": "<p>Usá los botones de Mute, Solo y Metrónomo de arriba.</p>",
             "barStart": 9,
-            "barEnd": 12
+            "barEnd": 12,
+            "part": "parte a"
           },
           {
             "title": "Somos dueños del tiempo",
             "type": "hint",
             "content": "<p>Pausá, o usá los cuadraditos de abajo.</p>",
             "barStart": 13,
-            "barEnd": 15
+            "barEnd": 15,
+            "part": "parte a"
           },
           {
             "title": "Entran coros",
             "type": "count",
             "content": "<div class='numbers'></div>",
             "barStart": 16,
-            "barEnd": 16
+            "barEnd": 16,
+            "part": "parte a"
           },
           {
             "title": "Verso 2",
             "type": "hint",
             "content": "<p>You repeat the lie while I’m finding myself, you all talking about time<br>Why are you being someone else?<br>Why are you being someone else?<br></p>",
             "barStart": 17,
-            "barEnd": 20
+            "barEnd": 20,
+            "part": "parte a"
           },
           {
             "title": "Verso 2",
             "type": "hint",
             "content": "<p>You repeat the lie while I’m finding myself, you all talking about timе<br>Being someone еlse<br>Why are you being someone else?</p>",
             "barStart": 21,
-            "barEnd": 24
+            "barEnd": 24,
+            "part": "parte a"
           },
           {
             "title": "Hacé de cuenta que estás viendo stories",
             "type": "hint",
             "content": "<p>Clickeá en la parte derecha o izquierda de la pantalla</p>",
             "barStart": 25,
-            "barEnd": 30
+            "barEnd": 30,
+            "part": "estribillo"
           },
           {
             "title": "Sacar bombo",
             "type": "count",
             "content": "<div class='numbers'></div>",
             "barStart": 31,
-            "barEnd": 31
+            "barEnd": 31,
+            "part": "estribillo"
           },
           {
             "title": "2 compases de aire, quedan los tops",
             "type": "hint",
             "content": "<p>Queremos generar un contraste fuerte cuando volvamos</p>",
             "barStart": 32,
-            "barEnd": 32
+            "barEnd": 32,
+            "part": "estribillo"
           },
           {
             "title": "Beat vuelve en",
             "type": "count",
             "content": "<div class='numbers'></div>",
             "barStart": 33,
-            "barEnd": 33
+            "barEnd": 33,
+            "part": "estribillo"
           },
           {
-            "title": "Intro II",
+            "title": "F#m | Emaj7",
             "type": "hint",
-            "content": "<p>F#m | Emaj7. Penta F#m obligada.</p>",
+            "content": "<p>Obligado, penta F#m.</p>",
             "barStart": 34,
-            "barEnd": 40
+            "barEnd": 40,
+            "part": "intro ii"
           },
           {
             "title": "Sacar bombo",
             "type": "count",
             "content": "<div class='numbers'></div>",
             "barStart": 41,
-            "barEnd": 41
+            "barEnd": 41,
+            "part": "intro ii"
           },
           {
             "title": "Solo tops",
             "type": "hint",
             "content": "<p></p>",
             "barStart": 42,
-            "barEnd": 43
+            "barEnd": 43,
+            "part": "parte a"
           },
           {
             "title": "Drop a 0",
             "type": "count",
             "content": "<div class='numbers'></div>",
             "barStart": 44,
-            "barEnd": 44
+            "barEnd": 44,
+            "part": "parte a"
           },
           {
             "title": "Entra con beat normal",
             "type": "count",
             "content": "<div class='numbers'></div>",
             "barStart": 45,
-            "barEnd": 45
+            "barEnd": 45,
+            "part": "parte a"
           },
           {
             "title": "Somos dueños del tiempo",
             "type": "hint",
             "content": "<p>Pausá, o usá los cuadraditos de abajo.</p>",
             "barStart": 46,
-            "barEnd": 49
+            "barEnd": 49,
+            "part": "parte a"
           },
           {
             "title": "Esta plataforma entiende de compases",
             "type": "hint",
             "content": "<p>Entonces podemos brindar información en el momento apropiado.</p>",
             "barStart": 50,
-            "barEnd": 57
+            "barEnd": 57,
+            "part": "parte a"
           },
           {
             "title": "Hacé de cuenta que estás viendo stories",
             "type": "hint",
             "content": "<p>Clickeá en la parte derecha o izquierda de la pantalla</p>",
             "barStart": 58,
-            "barEnd": 67
+            "barEnd": 67,
+            "part": "parte b"
           }
         ]
       },

@@ -1,6 +1,9 @@
 body, html {
     min-height: 100%;
 }
+svg {
+    pointer-events: none;
+}
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: #fff;
@@ -12,8 +15,101 @@ body {
 #onboarding {
     display: none;
 }
+#toggleInfo {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
+    background: none;
+    width: 60px;
+    height: 60px;
+    display: block;
+    border-radius: 12px;
+    z-index: 9999999;
+    cursor: pointer;
+}
+#toggleInfo:after {
+    display: block;
+    width: 20px;
+    height: 20px;
+    content: "";
+    border: 2px solid #fff;
+    position: absolute;
+    top: 17px;
+    left: 18px;
+    border-radius: 14px;
+}
+#app:not(.infoMode) .light #toggleInfo {
+    color: rgba(0,0,0,.3);
+}
+#app:not(.infoMode) .light #toggleInfo:after{
+    border-color: rgba(0,0,0,.3);
+}
+#toggleInfo.hidden {
+    display: none;
+}
+.infoMode #toggleInfo {
+    text-indent: -9999px;
+    overflow: hidden;
+}
+.infoMode #toggleInfo:before {
+    content: "\2715";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-indent: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 58px;
+}
+.infoMode #placeholder.current,
+.infoMode #extra.current {
+    display: flex;
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: calc(100% - 15px);
+    height: calc(100% - 15px);
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    border-radius: 10px;
+    z-index: 9998;
+}
+.infoMode #placeholder.current #playAudio,
+.infoMode #placeholder.current #playAudio + p {
+    display: none;
+}
+#placeholder h1 {
+    margin-bottom: 0;
+}
+#placeholder h2 {
+    font-size: 1em;
+}
+#placeholder ul {
+    margin: 2em 0;
+    padding: 0;
+}
 #placeholder ul li {
-    text-align-last: left;
+    /*text-align-last: left;*/
+    text-align: left;
+    list-style: none;
+    padding: 5px;
+    line-height: 24px;
+    font-size: 12px;
+}
+#placeholder ul li span {
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-right: 10px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,.3);
+    font-weight: 600;
 }
 #app {
     display: none;
@@ -23,7 +119,7 @@ body {
     position: absolute;
     top: 5px;
     left: 60px;
-    z-index: 9999;
+    z-index: 99999;
     background: #111;
     bottom: 75px;
     padding: 10px;
@@ -91,10 +187,10 @@ body {
     color: #000;
     text-transform: uppercase;
     border-radius: 10px;
-    padding: 10px 15px;
+    padding: 15px 25px;
     cursor: pointer;
     letter-spacing: 1px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     border: none;
 }
@@ -184,6 +280,7 @@ body {
     width: 25%;
     border-radius: 10px;
     background: none;
+    z-index: 9999;
 }
 #nextBar {
     right: 0;
@@ -221,15 +318,23 @@ body {
 }
 
 .light #structure {
-    background-color: #fff;
+    background-color: #fff !important;
 }
-.intro #structure {
+.intro #structure,
+.infoMode .light #placeholder.current,
+.infoMode .light #extra.current,
+.infoMode .intro #placeholder.current,
+.infoMode .intro #extra.current {
     background-color: #333E49;
 }
-.a #structure {
+.a #structure,
+.infoMode .a #placeholder.current,
+.infoMode .a #extra.current {
     background-color: #331E3A;
 }
-.b #structure {
+.b #structure,
+.infoMode .b #placeholder.current,
+.infoMode .b #extra.current {
     background-color: #3E232F;
 }
 .macro.hint:not(.active),
@@ -247,6 +352,34 @@ body {
 .micro.hint,
 .count.hint {
     text-align: center;
+}
+.micro h3 {
+    font-size: 1.6em;
+    font-weight: 600;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.micro p {
+    margin-left: 2em;
+    margin-right: 2em;
+}
+.micro.active:before {
+    content: attr(data-part);
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    background: rgba(0,0,0,.7);
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+.light .micro.active:before,
+.light #tracktime {
+    background: none;
+    border: 1px solid rgba(0,0,0,.2);
+    color: rgba(0,0,0,.2);
 }
 .hasScore {
     color: #111;
@@ -473,6 +606,9 @@ input[type="range"] {
     #actions .buttonContainer {
         flex-direction: row;
     }
+    .micro.active:before {
+        top: 20px;
+    }
     #visor {
         flex: 1;
         height: auto;
@@ -516,5 +652,25 @@ input[type="range"] {
     .count span {
         font-size: 48px;
         margin: 0 25px;
+    }
+    .infoMode #placeholder.current, 
+    .infoMode #extra.current {
+        top: 10px;
+        left: 10px;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+    }
+    #toggleInfo {
+        top: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+    }
+    #toggleInfo:after {
+        top: 12px;
+        left: 13px;
+    }
+    .infoMode #toggleInfo:before {
+        line-height: 48px;
     }
 }

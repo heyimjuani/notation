@@ -101,22 +101,27 @@
                 <button id="nextBar" class="skipBar" onclick="nextBar()"></button>
                 <button id="prevBar" class="skipBar"></button>
                 <span id="tracktime">0:00</span>
+                <button id="toggleInfo">i</button>
                 <div id="structure">
                     <div class="demo">
-                        <div id="placeholder" class="micro hint active">
+                        <div id="placeholder" class="micro hint active" data-part="data 1/2">
                             <h1>Suddenly Driven</h1>
-                            <h3>Estructura</h3>
-                            <p>Acá se podría destacar la estructura base de la canción. <br>Objetivo: consenso y hablar el mismo idioma.</p>
+                            <h2>82 BPM. F#m</h2>
                             <ul>
-                                <li>Intro: 8 compases</li>
-                                <li>Parte A: 16 compases</li>
-                                <li>Parte B: 8 + 1 compases</li>
-                                <li>Intro ii: 8 compases</li>
-                                <li>Parte A ii: 16 compases</li>
-                                <li>Parte B ii: 8 + 2 compases</li>
+                                <li><span class="part-intro">Intro</span> 8 compases</li>
+                                <li><span class="part-a">Verso 1</span> 8 compases</li>
+                                <li><span class="part-a">Verso 2</span> 8 compases</li>
+                                <li><span class="part-b">Estribillo</span> 8 + 1 compases</li>
+                                <li><span class="part-intro">Intro ii</span> 8 compases</li>
+                                <li><span class="part-a">Verso 3</span> 8 compases</li>
+                                <li><span class="part-a">Verso 4</span> 8 compases</li>
+                                <li><span class="part-b">Estribillo</span> 8 + 2 compases</li>
                             </ul>
-                            <button id="playAudio" onclick="bufferIntent()">Reproducir Audio</button>
+                            <button id="playAudio" onclick="bufferIntent()">empecemos &rarr;</button>
                             <p><small>Cuando estés listo apretá este botón.</small></p>
+                        </div>
+                        <div id="extra" class="micro hint" data-part="data 2/2">
+                            <h1>Cualquier otra data</h1>
                         </div>
                         <div id="hintsContainer"></div>
                     </div>
