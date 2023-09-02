@@ -7,6 +7,7 @@ body {
     background: #111111;
     min-height: 100vh;
     display: flex;
+    margin: 0;
 }
 #onboarding {
     display: none;
@@ -219,6 +220,9 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,.5);
 }
 
+.light #structure {
+    background-color: #fff;
+}
 .intro #structure {
     background-color: #333E49;
 }
@@ -243,6 +247,16 @@ body {
 .micro.hint,
 .count.hint {
     text-align: center;
+}
+.hasScore {
+    color: #111;
+}
+.score {
+    max-width: calc(100vw - 40px);
+    margin: 0 auto;
+}
+.score svg {
+    width: 100% !important;
 }
 .count span {
     font-size: 68px;

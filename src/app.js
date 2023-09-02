@@ -386,9 +386,13 @@ function nowPlaying(){
         document.getElementById("metadata").className = "b";
     }
 
+    if (currentBar >= 3 && currentBar <= 4) {
+        document.getElementById("metadata").className = "light";
+    }
+
     updateActiveClasses(currentBar);
 
-    if (!hasFunctionRun && ((currentBar == 41) || (currentBar == 44) || (currentBar == 31))) {
+    if (!hasFunctionRun && ((currentBar == 41) || (currentBar == 44) || (currentBar == 31) || (currentBar == 16))) {
         drop("down");
         hasFunctionRun = true;
         setTimeout(() => {
@@ -646,7 +650,11 @@ fetch('src/songs.json')
         const hintElement = document.createElement('div');
         hintElement.classList.add('micro', hint.type);
 
-        hintElement.innerHTML = `
+        if (hint.hasOwnProperty("score")) {
+            hintElement.classList.add("hasScore");
+            hintElement.innerHTML += `<div id='${hint.score}' class='score'></div>`
+        }
+        hintElement.innerHTML += `
             <h3>${hint.title}</h3>
             ${hint.content}
         `;
@@ -656,6 +664,73 @@ fetch('src/songs.json')
 
         hintsContainer.appendChild(hintElement);
     });
+    
+    // vexflow code
+    const {
+        Renderer,
+        Stave,
+        StaveNote,
+        Voice,
+        Formatter
+    } = Vex.Flow;
+    
+    // Create an SVG renderer and attach it to the DIV element named "boo".
+    const div = document.getElementById('vexflow');
+    const renderer = new Renderer(div, Renderer.Backends.SVG);
+    
+    // Configure the rendering context.
+    renderer.resize(500, 120);
+    const context = renderer.getContext();
+    
+    // Create a stave of width 400 at position 10, 40 on the canvas.
+    const stave = new Stave(0, 0, 500);
+    
+    // Add a clef and time signature.
+    stave.addClef('treble').addTimeSignature('4/4');
+    
+    // Connect it to the rendering context and draw!
+    stave.setContext(context).draw();
+    
+    // Create the notes
+    const notes = [
+    // A quarter-note C.
+    new StaveNote({
+        keys: ['c/4'],
+        duration: 'q'
+    }),
+    
+    // A quarter-note D.
+    new StaveNote({
+        keys: ['d/4'],
+        duration: 'q'
+    }),
+    
+    // A quarter-note rest. Note that the key (b/4) specifies the vertical
+    // position of the rest.
+    new StaveNote({
+        keys: ['b/4'],
+        duration: 'qr'
+    }),
+    
+    // A C-Major chord.
+    new StaveNote({
+        keys: ['c/4', 'e/4', 'g/4'],
+        duration: 'q'
+    }),
+    ];
+    
+    // Create a voice in 4/4 and add above notes
+    const voice = new Voice({
+        num_beats: 4,
+        beat_value: 4
+    });
+    voice.addTickables(notes);
+    
+    // Format and justify the notes to 400 pixels.
+    new Formatter().joinVoices([voice]).format([voice], 350);
+    
+    // Render voice
+    voice.draw(context, stave);
 })
 .catch(error => {
     console.error('Error loading JSON:', error);

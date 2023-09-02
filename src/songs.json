@@ -5,7 +5,7 @@
       {
         "title": "Intro",
         "type": "hint",
-        "content": "<p>Penta de F#m</p>",
+        "content": "<p>F#m | Emaj7. Penta F#m obligada.</p>",
         "barStart": 1,
         "barEnd": 1
       },
@@ -19,6 +19,7 @@
       {
         "title": "Esta plataforma entiende de compases",
         "type": "hint",
+        "score": "vexflow",
         "content": "<p>Entonces podemos brindar información en el momento apropiado.</p>",
         "barStart": 3,
         "barEnd": 4
@@ -31,16 +32,16 @@
         "barEnd": 6
       },
       {
-        "title": "Intro",
+        "title": "Intro - turnaround",
         "type": "hint",
-        "content": "<p>Turnaround</p>",
+        "content": "<p>Dm Bm7 | C#7</p>",
         "barStart": 7,
         "barEnd": 8
       },
       {
-        "title": "Lo que suena está dividido en capas",
+        "title": "Hay capas y hay un mixer",
         "type": "hint",
-        "content": "<p>En este caso yo indiqué que soy del mundo harmónico, por eso la guitarra arriba. <br>Usá los botones de Mute, Solo y Metrónomo de arriba.</p>",
+        "content": "<p>Usá los botones de Mute, Solo y Metrónomo de arriba.</p>",
         "barStart": 9,
         "barEnd": 12
       },
@@ -49,6 +50,13 @@
         "type": "hint",
         "content": "<p>Pausá, o usá los cuadraditos de abajo.</p>",
         "barStart": 13,
+        "barEnd": 15
+      },
+      {
+        "title": "Entran coros",
+        "type": "count",
+        "content": "<div class='numbers'></div>",
+        "barStart": 16,
         "barEnd": 16
       },
       {
@@ -96,7 +104,7 @@
       {
         "title": "Intro II",
         "type": "hint",
-        "content": "<p>F#m | Emaj7. Penta obligada.</p>",
+        "content": "<p>F#m | Emaj7. Penta F#m obligada.</p>",
         "barStart": 34,
         "barEnd": 40
       },
