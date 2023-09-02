@@ -543,7 +543,7 @@ skipButtons.forEach(button => {
     });
 });
 
-function bufferIntent() {
+function bufferIntent(event) {
     const audioElements = [
         PIXI.sound._sounds['bass'],
         PIXI.sound._sounds['other'],
@@ -557,6 +557,7 @@ function bufferIntent() {
 
     const checkPlayable = () => {
         const allPlayable = audioElements.every(audio => audio.isPlayable);
+        event.target.innerHTML = "cargando";
 
         if (allPlayable) {
             audioElements.forEach(audio => audio.play());
