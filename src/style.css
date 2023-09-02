@@ -210,6 +210,7 @@ body {
 #actions button,
 #mixer button {
     width: 44px;
+    font-size: 16px;
     height: 44px;
     border: 1px solid #585858;
     border-radius: 10px;
@@ -618,6 +619,9 @@ input[type="range"] {
     }
     #navigation {
         padding: 0px 10px 45px 10px;
+    }
+    .skipTo {
+        height: 50px;
     }
     input[type="range"] {
         bottom: 43px;
