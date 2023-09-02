@@ -637,13 +637,14 @@ function resumeAll() {
 }
 
 const hintsContainer = document.getElementById('hintsContainer');
-const selectedSongIndex = 0; // Change this index as needed
+const selectedSongIndex = 0;
+const desiredInstrument = "harmonic"; // Change this index as needed
 
 // Load songs data from the JSON file
 fetch('src/songs.json')
 .then(response => response.json())
 .then(songsData => {
-    const selectedSong = songsData[selectedSongIndex];
+    const selectedSong = songsData[selectedSongIndex].instruments.find(instrument => instrument.name === desiredInstrument);
 
     // Loop through hints of the selected song and generate HTML
     selectedSong.hints.forEach(hint => {
@@ -665,6 +666,7 @@ fetch('src/songs.json')
         hintsContainer.appendChild(hintElement);
     });
     
+    // we'll need one of these per score occurence
     // vexflow code
     const {
         Renderer,
@@ -734,4 +736,33 @@ fetch('src/songs.json')
 })
 .catch(error => {
     console.error('Error loading JSON:', error);
+});
+
+document.getElementById('drums-mixer').addEventListener('click', (event) => {
+    hintsContainer.innerHTML = "";
+    const changeTo = event.target.getAttribute('data-instrument');
+    
+    fetch('src/songs.json')
+    .then(response => response.json())
+    .then(songsData => {
+        const selectedSong = songsData[selectedSongIndex].instruments.find(instrument => instrument.name === changeTo);
+
+        // Loop through hints of the selected song and generate HTML
+        selectedSong.hints.forEach(hint => {
+            const hintElement = document.createElement('div');
+            hintElement.classList.add('micro', hint.type);
+            hintElement.innerHTML += `
+                <h3>${hint.title}</h3>
+                ${hint.content}
+            `;
+            // Set "data-begins" and "data-ends" attributes
+            hintElement.setAttribute('data-begins', hint.barStart);
+            hintElement.setAttribute('data-ends', hint.barEnd);
+
+            hintsContainer.appendChild(hintElement);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading JSON:', error);
+    });
 });

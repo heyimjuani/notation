@@ -513,4 +513,8 @@ input[type="range"] {
     #mixer .container fieldset button:last-child {
         margin: 0;
     }
+    .count span {
+        font-size: 48px;
+        margin: 0 25px;
+    }
 }
