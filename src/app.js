@@ -411,11 +411,15 @@ function nowPlaying(){
 }
 
 function togglePlay(el) {
-    if (isPlaying) {
-        pauseAll();
-        document.getElementById("togglePlay").classList.add('paused');
+    if (currentBar) {
+        if (isPlaying) {
+            pauseAll();
+            document.getElementById("togglePlay").classList.add('paused');
+        } else {
+            skipIntent();
+        }
     } else {
-        skipIntent();
+        bufferIntent();
     }
 }
 
@@ -526,15 +530,17 @@ const skipButtons = document.querySelectorAll('.skipTo');
 
 // Attach event listeners to each button
 skipButtons.forEach(button => {
-    if (currentBar) {
-        button.addEventListener('click', function() {
+    button.addEventListener('click', function() {
+        if (currentBar) {
             const parameter = button.getAttribute('data-skip');
             // console.log("skip to", parameter);
             globalProgress = (((parameter-1) * beatSeconds * 4) / audioDuration) * 100;
             // console.log("plz skip to ", globalProgress);
             skipIntent();
-        });
-    }
+        } else {
+            console.log("click");
+        }
+    });
 });
 
 function bufferIntent() {
@@ -577,6 +583,7 @@ function bufferIntent() {
                 document.getElementById("togglePlay").classList.add('paused');
             });
             isPlaying = true;
+            document.getElementById("togglePlay").classList.remove('paused');
             document.getElementById("toggleInfo").classList.remove("hidden");
         } else {
             setTimeout(checkPlayable, 2000); // Check again after 100ms

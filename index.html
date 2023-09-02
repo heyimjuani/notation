@@ -51,7 +51,7 @@
             <button id="closeMixer">Close</button>
         </div>
     </div>
-    <div id="onboarding" class="active">
+    <div id="onboarding" class="">
         <small>Estás viendo un demo</small>
         <h1>Suddenly Driven</h1>
         <h2>Grace & Badlove</h2>
@@ -66,7 +66,7 @@
         <h6>A cada uno le va a interesar algo distinto. </h6>
         <h6>Clickeá en Armónico por ejemplo</h6>
     </div>
-    <div id="app">
+    <div id="app" class="active">
         <div id="actions">
             <div class="buttonContainer">
                 <button id="changeInstrument" class="harmonic"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -81,7 +81,7 @@
             </div>
             <div class="timeIndicators">
                 <span class="barIndicator"><span id="currentBar">–</span>Bar</span>
-                <button id="togglePlay" onclick="togglePlay(this)">
+                <button id="togglePlay" class="paused" onclick="togglePlay(this)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="18" viewBox="0 0 12 18" fill="none" class="audioPause">
                         <g opacity="0.3">
                             <path d="M1.5 0C0.671574 0 0 0.671573 0 1.5V16.5C0 17.3284 0.671574 18 1.5 18C2.32843 18 3 17.3284 3 16.5V1.5C3 0.671573 2.32843 0 1.5 0Z" fill="white"/>
