@@ -81,6 +81,10 @@ body {
     border-radius: 10px;
     z-index: 9998;
 }
+.infoMode #placeholder.current h1,
+.infoMode #placeholder.current h2 {
+    display: none;
+}
 .infoMode #placeholder.current #playAudio,
 .infoMode #placeholder.current #playAudio + p {
     display: none;
